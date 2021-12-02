@@ -5,6 +5,7 @@ const authRoute = require("./routes/login.route");
 const userRoute = require("./routes/user.route");
 const matiereRoute = require("./routes/matiere.routes");
 const produitRoute = require("./routes/produit.routes");
+const operationRoute = require("./routes/operation.routes");
 const routerReset = require("./routes/user.reset.route");
 const anthropometriqueRoute = require("./routes/anthropometrique.route");
 const patientRoute = require("./routes/patient.route");
@@ -62,13 +63,26 @@ app.use(
 
 //Route Reporting
 
-app.use("/reporting", routeReporting);
+app.use(
+  "/reporting",
+  passport.authenticate("jwt", { session: false }),
+  routeReporting
+);
 //Route Stock
-app.use("/matiere", matiereRoute);
+app.use(
+  "/matiere",
+  passport.authenticate("jwt", { session: false }),
+  matiereRoute
+);
 app.use(
   "/produit",
   passport.authenticate("jwt", { session: false }),
   produitRoute
+);
+app.use(
+  "/operation",
+  passport.authenticate("jwt", { session: false }),
+  operationRoute
 );
 
 module.exports = app;
