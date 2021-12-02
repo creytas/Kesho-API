@@ -14,7 +14,20 @@ const getAllMatieres = async (req, res, next) => {
       res.status(500).send({ message: error.message });
     });
 };
-const getMatiereById = async (req, res, next) => {};
+const getMatiereById = async (req, res, next) => {
+  const id = req.params.id;
+  await matiere_premiere
+    .findByPk(id)
+    .then((matiere) => {
+      if (isEmpty(matiere)) {
+        return res.status(404).send({ message: `matiere ${id} not found` });
+      }
+      res.status(200).send(matiere);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
 const addMatiere = async (req, res, next) => {};
 const updateMatiere = async (req, res, next) => {};
 const deleteAllMatieres = async (req, res, next) => {};
