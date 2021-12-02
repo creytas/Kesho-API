@@ -3,6 +3,8 @@ const app = express();
 const cors = require("cors");
 const authRoute = require("./routes/login.route");
 const userRoute = require("./routes/user.route");
+const matiereRoute = require("./routes/matiere.routes");
+const produitRoute = require("./routes/produit.routes");
 const routerReset = require("./routes/user.reset.route");
 const anthropometriqueRoute = require("./routes/anthropometrique.route");
 const patientRoute = require("./routes/patient.route");
@@ -11,7 +13,7 @@ const routeReporting = require("./routes/reporting");
 const passport = require("passport");
 
 const corsOptions = {
-  origin: ["http://localhost:3000",  /.{5,6}\/\/kesho-congo-1-.{8,}/],
+  origin: ["http://localhost:3000", /.{5,6}\/\/kesho-congo-1-.{8,}/],
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -61,5 +63,16 @@ app.use(
 //Route Reporting
 
 app.use("/reporting", routeReporting);
+//Route Stock
+app.use(
+  "/matiere",
+  passport.authenticate("jwt", { session: false }),
+  matiereRoute
+);
+app.use(
+  "/produit",
+  passport.authenticate("jwt", { session: false }),
+  produitRoute
+);
 
 module.exports = app;
