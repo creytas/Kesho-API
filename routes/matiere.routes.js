@@ -6,6 +6,7 @@ matiereRouter.get("/", matiereController.getAllMatieres);
 matiereRouter.get("/:id", matiereController.getMatiereById);
 matiereRouter.post("/", matiereController.addMatiere);
 matiereRouter.put("/:id", matiereController.updateMatiere);
+matiereRouter.patch("/:id/qte", matiereController.addMatiereQuantity);
 matiereRouter.delete("/", matiereController.deleteAllMatieres);
 matiereRouter.delete("/:id", matiereController.deleteMatiereById);
 
