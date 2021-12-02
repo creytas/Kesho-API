@@ -1,6 +1,19 @@
 const { matiere_premiere, matiere_produit } = require("../models");
+const { isEmpty } = require("lodash");
 
-const getAllMatieres = async (req, res, next) => {};
+const getAllMatieres = async (req, res, next) => {
+  await matiere_premiere
+    .findAll()
+    .then((data) => {
+      if (isEmpty(data)) {
+        return res.status(404).send({ message: "matiere not found" });
+      }
+      res.status(200).send(data);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
 const getMatiereById = async (req, res, next) => {};
 const addMatiere = async (req, res, next) => {};
 const updateMatiere = async (req, res, next) => {};

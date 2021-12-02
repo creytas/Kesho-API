@@ -64,11 +64,7 @@ app.use(
 
 app.use("/reporting", routeReporting);
 //Route Stock
-app.use(
-  "/matiere",
-  passport.authenticate("jwt", { session: false }),
-  matiereRoute
-);
+app.use("/matiere", matiereRoute);
 app.use(
   "/produit",
   passport.authenticate("jwt", { session: false }),

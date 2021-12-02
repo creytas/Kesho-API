@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-if (process.env.NODE_ENV === "development1") {
+if (process.env.NODE_ENV === "development") {
   console.log("db local");
   module.exports = {
     PORT: process.env.PORTLOCAL,

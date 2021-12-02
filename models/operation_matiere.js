@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class operation_matiere extends Model {
     /**
@@ -11,17 +9,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      operation_matiere.belongsTo(models.matiere_premiere,{
+        foreignKey:"matiere_id"
+      })
     }
-  };
-  operation_matiere.init({
-    date_operation: DataTypes.DATE,
-    matiere_id: DataTypes.INTEGER,
-    type_operation: DataTypes.STRING,
-    qte_operation: DataTypes.INTEGER,
-    commentaire_operation: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'operation_matiere',
-  });
+  }
+  operation_matiere.init(
+    {
+      date_operation: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      matiere_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      type_operation: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      qte_operation: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      commentaire_operation: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "operation_matiere",
+    }
+  );
   return operation_matiere;
 };

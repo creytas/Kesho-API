@@ -8,3 +8,5 @@ matiereRouter.post("/", matiereController.addMatiere);
 matiereRouter.put("/:id", matiereController.updateMatiere);
 matiereRouter.delete("/", matiereController.deleteAllMatieres);
 matiereRouter.delete("/:id", matiereController.deleteMatiereById);
+
+module.exports = matiereRouter;

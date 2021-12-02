@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       matiere_premiere.hasMany(models.matiere_produit, {
         foreignKey: "matiere_id",
       });
+      matiere_premiere.hasMany(models.operation_matiere, {
+        foreignKey: "matiere_id",
+      });
     }
   }
   matiere_premiere.init(

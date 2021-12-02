@@ -8,3 +8,5 @@ produitRouter.post("/", produitController.addProduit);
 produitRouter.put("/:id", produitController.updateProduit);
 produitRouter.delete("/", produitController.deleteAllProduits);
 produitRouter.delete("/:id", produitController.deleteProduitById);
+
+module.exports=produitRouter;
