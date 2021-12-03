@@ -2,6 +2,7 @@ const {
   matiere_premiere,
   matiere_produit,
   operation_matiere,
+  sequelize,
 } = require("../models");
 const { isEmpty } = require("lodash");
 
@@ -33,21 +34,51 @@ const getMatiereById = async (req, res, next) => {
     });
 };
 const addMatiere = async (req, res, next) => {
-  const { libelle_matiere, qte_matiere, prix_achat, affectation } = req.body;
-  const matiere = {
-    libelle_matiere: libelle_matiere,
-    qte_matiere: qte_matiere,
-    prix_achat: prix_achat,
-    affectation: affectation,
-  };
-  await matiere_premiere
-    .create(matiere)
-    .then((matiere) => {
-      res.status(200).send(matiere);
-    })
-    .catch((error) => {
+  console.log("je suis dans add matiere");
+  const transaction = await sequelize.transaction();
+  const {
+    libelle_matiere,
+    qte_matiere,
+    prix_achat,
+    affectation,
+    date_operation,
+    commentaire_operation,
+  } = req.body;
+  try {
+    console.log("je suis dans le try-catch");
+    const matiere = await matiere_premiere.create(
+      {
+        libelle_matiere: libelle_matiere,
+        qte_matiere: qte_matiere,
+        prix_achat: prix_achat,
+        affectation: affectation,
+      },
+      { transaction }
+    );
+    console.log(`*** je suis la matiere ${matiere.id} ***`);
+    if (matiere) {
+      await operation_matiere.create(
+        {
+          date_operation: Date(date_operation),
+          matiere_id: matiere.id,
+          type_operation: "entrée",
+          qte_operation: matiere.qte_matiere,
+          commentaire_operation: commentaire_operation,
+        },
+        { transaction }
+      );
+    } else {
+      throw new Error("Matiere premiere error occured");
+    }
+
+    await transaction.commit().then(() => {
+      res.status(200).send({ message: "Success" });
+    });
+  } catch (error) {
+    await transaction.rollback().then(() => {
       res.status(500).send({ message: error.message });
     });
+  }
 };
 const addMatiereQuantity = async (req, res, next) => {};
 const updateMatiere = async (req, res, next) => {};

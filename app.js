@@ -71,7 +71,6 @@ app.use(
 //Route Stock
 app.use(
   "/matiere",
-  passport.authenticate("jwt", { session: false }),
   matiereRoute
 );
 app.use(
@@ -81,7 +80,6 @@ app.use(
 );
 app.use(
   "/operation",
-  passport.authenticate("jwt", { session: false }),
   operationRoute
 );
 
