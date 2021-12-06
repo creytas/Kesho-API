@@ -73,7 +73,38 @@ const addOperation = async (req, res, next) => {
     });
   }
 };
-const updateOperation = async (req, res, next) => {};
+
+const updateOperation = async (req, res, next) => {
+  const transaction = await sequelize.transaction();
+  const operation_id = req.params.id;
+  try {
+    const updatedMatiere = await matiere_premiere.update(
+      { qte_matiere: req.matiereExist.qte_matiere },
+      { where: { id: req.matiereExist.id } },
+      { transaction }
+    );
+    if (updatedMatiere) {
+      const newOperation = await operation_matiere.update(
+        req.body,
+        { where: { id: operation_id } },
+        {
+          transaction,
+        }
+      );
+      await transaction.commit().then(() => {
+        return res
+          .status(200)
+          .send({ message: `Operation updated Succefully` });
+      });
+    } else {
+      throw new Error("Matiere error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
 const deleteAllOperations = async (req, res, next) => {};
 const deleteOperationById = async (req, res, next) => {};
 
