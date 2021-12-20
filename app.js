@@ -69,18 +69,12 @@ app.use(
   routeReporting
 );
 //Route Stock
-app.use(
-  "/matiere",
-  matiereRoute
-);
+app.use("/matiere", matiereRoute);
 app.use(
   "/produit",
   passport.authenticate("jwt", { session: false }),
   produitRoute
 );
-app.use(
-  "/operation",
-  operationRoute
-);
+app.use("/operation", operationRoute);
 
 module.exports = app;

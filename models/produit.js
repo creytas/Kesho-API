@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       qte_produit: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
       prix_unitaire: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
       date_production: {

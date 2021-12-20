@@ -13,11 +13,11 @@ module.exports = {
         allowNull: false,
       },
       qte_produit: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       prix_unitaire: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       date_production: {

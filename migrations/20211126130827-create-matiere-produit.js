@@ -27,7 +27,7 @@ module.exports = {
         },
       },
       qte_matiere: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       createdAt: {

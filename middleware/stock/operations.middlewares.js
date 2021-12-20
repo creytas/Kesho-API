@@ -2,34 +2,55 @@ const express = require("express");
 const { matiere_premiere, operation_matiere } = require("../../models");
 
 const matiereExist = async (req, res, next) => {
-  const matiere_id = req.body.matiere_id;
-  let matiereExist = await matiere_premiere.findOne({
-    where: {
-      id: matiere_id,
-    },
-  });
+  //const matiere_id = req.body.matiere_id;
+  const matieres_operation = req.body.matieres;
 
-  if (!matiereExist) {
-    return res.status(404).send({ message: `matiere ${matiere_id} not found` });
+  if (matieres_operation && matieres_operation.length > 0) {
+    for (const matiere of matieres_operation) {
+      const matiereExist = await matiere_premiere.findOne({
+        where: {
+          id: matiere.id,
+        },
+      });
+      if (!matiereExist) {
+        return res
+          .status(404)
+          .send({ message: `matiere ${matiere_id} not found` });
+      }
+      req.matiereExist = matiereExist;
+      console.log(`*************la matiere ${req.matiereExist.id} existe`);
+    }
+
+    next();
+  } else {
+    throw new Error("Matieres error occured");
   }
-  req.matiereExist = matiereExist;
-  console.log(`la matiere ${req.matiereExist.id} existe`);
-  next();
 };
 
 const typeOperation = async (req, res, next) => {
-  const { type_operation, qte_operation } = req.body;
-  if (type_operation == "sortie") {
-    if (qte_operation > req.matiereExist.qte_matiere) {
-      return res.status(400).send({
-        message: `matiere ${req.matiereExist.libelle_matiere} amount is insuficient`,
-      });
+  const { type_operation, matieres } = req.body;
+
+  for (const matiere of matieres) {
+    if (matiere.id === req.matiereExist.id) {
+      console.log(
+        `the amount of ${req.matiereExist.libelle_matiere} to update is ${matiere.qte_operation}`
+      );
+      if (type_operation == "sortie") {
+        if (matiere.qte_operation > req.matiereExist.qte_matiere) {
+          return res.status(400).send({
+            message: `matiere ${req.matiereExist.libelle_matiere} amount is insuficient`,
+          });
+        }
+        req.matiereExist.qte_matiere =
+          req.matiereExist.qte_matiere - matiere.qte_operation;
+      } else {
+        req.matiereExist.qte_matiere =
+          req.matiereExist.qte_matiere + matiere.qte_operation;
+      }
+      req.matiereExist;
+      req.qte_matiere_operation = matiere.qte_operation;
     }
-    req.matiereExist.qte_matiere = req.matiereExist.qte_matiere - qte_operation;
-  } else {
-    req.matiereExist.qte_matiere = req.matiereExist.qte_matiere + qte_operation;
   }
-  req.matiereExist;
   next();
 };
 

@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
       },
       qte_operation: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       commentaire_operation: {

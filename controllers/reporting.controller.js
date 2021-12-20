@@ -12,11 +12,23 @@ const { QueryTypes, Op, where } = require("sequelize");
 const getReporting = async (req, res, next) => {
   try {
     const result = await sequelize.transaction(async (t) => {
+      const nombre_garcon_now = await sequelize.query(
+        `select count(id_patient) as nombre_garcon
+        from patients
+        where sexe_patient="M" and MONTH(createdAt) = MONTH(now());`,
+        { type: QueryTypes.SELECT }
+      );
+      const nombre_fille_now = await sequelize.query(
+        `select count(id_patient) as nombre_garcon
+        from patients
+        where sexe_patient="F" and MONTH(createdAt) = MONTH(now());`,
+        { type: QueryTypes.SELECT }
+      );
       const nombre_garcon = await sequelize.query(
         `
         select count(id_patient) as nombre_garcon
             from patients
-            where sexe_patient="M" and MONTH(createdAt) = MONTH(now())  
+            where sexe_patient="M"  
             ;
         `,
         { type: QueryTypes.SELECT }
@@ -25,7 +37,7 @@ const getReporting = async (req, res, next) => {
         `
         select count(id_patient) as nombre_fille
             from patients
-            where sexe_patient="F" and MONTH(createdAt) = MONTH(now())  
+            where sexe_patient="F"
             ;
         `,
         { type: QueryTypes.SELECT }
@@ -37,7 +49,7 @@ const getReporting = async (req, res, next) => {
           select id_patient, sexe_patient, createdAt, datediff(now(), date_naissance_patient)/365 as age
             from patients)
             as pa_age
-            where  age > 17 and sexe_patient="M" and MONTH(createdAt) = MONTH(now())  
+            where  age > 17 and sexe_patient="M"  
             ;
         `,
         { type: QueryTypes.SELECT }
@@ -48,7 +60,7 @@ const getReporting = async (req, res, next) => {
           select id_patient, sexe_patient, createdAt, datediff(now(), date_naissance_patient)/365 as age
             from patients)
             as pa_age
-            where  age>17 and sexe_patient="F" and MONTH(createdAt) = MONTH(now())  ;
+            where  age>17 and sexe_patient="F";
         `,
         { type: QueryTypes.SELECT }
       );
@@ -59,7 +71,7 @@ const getReporting = async (req, res, next) => {
           select id_patient, sexe_patient, createdAt, datediff(now(), date_naissance_patient)/365 as age
             from patients)
             as pa_age
-            where age <= 2  and sexe_patient="F" and MONTH(createdAt) = MONTH(now())  ;
+            where age <= 2  and sexe_patient="F";
         `,
         { type: QueryTypes.SELECT }
       );
@@ -69,7 +81,7 @@ const getReporting = async (req, res, next) => {
           select id_patient, sexe_patient, createdAt, datediff(now(), date_naissance_patient)/365 as age
             from patients)
             as pa_age
-            where age <= 2  and sexe_patient="M" and MONTH(createdAt) = MONTH(now())   ;
+            where age <= 2  and sexe_patient="M"   ;
         `,
         { type: QueryTypes.SELECT }
       );
@@ -80,7 +92,7 @@ const getReporting = async (req, res, next) => {
           select id_patient, sexe_patient, createdAt, datediff(now(), date_naissance_patient)/365 as age
             from patients)
             as pa_age
-            where  (age > 2 and age <= 5) and sexe_patient="M" and MONTH(createdAt) = MONTH(now())  ;
+            where  (age > 2 and age <= 5) and sexe_patient="M"  ;
         `,
         { type: QueryTypes.SELECT }
       );
@@ -90,7 +102,7 @@ const getReporting = async (req, res, next) => {
           select id_patient, sexe_patient, createdAt, datediff(now(), date_naissance_patient)/365 as age
             from patients)
             as pa_age
-            where  (age > 2 and age <= 5) and sexe_patient="F" and MONTH(createdAt) = MONTH(now())  ;
+            where  (age > 2 and age <= 5) and sexe_patient="F"  ;
         `,
         { type: QueryTypes.SELECT }
       );
@@ -414,6 +426,8 @@ const getReporting = async (req, res, next) => {
       //   },
       // });
       res.status(200).json({
+        nombre_garcon_now,
+        nombre_fille_now,
         nombre_garcon,
         nombre_fille,
 

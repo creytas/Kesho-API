@@ -45,7 +45,6 @@ const addMatiere = async (req, res, next) => {
     commentaire_operation,
   } = req.body;
   try {
-    console.log("je suis dans le try-catch");
     const matiere = await matiere_premiere.create(
       {
         libelle_matiere: libelle_matiere,
@@ -55,7 +54,6 @@ const addMatiere = async (req, res, next) => {
       },
       { transaction }
     );
-    console.log(`*** je suis la matiere ${matiere.id} ***`);
     if (matiere) {
       await operation_matiere.create(
         {
