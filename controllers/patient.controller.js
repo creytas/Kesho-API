@@ -14,6 +14,7 @@ const addPatient = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const {
+        ration_seche,
         atcd_mas,
         nbre_chute,
         date_naissance_tuteur,
@@ -161,6 +162,7 @@ const addPatient = async (req, res) => {
         taille,
         type_malnutrition,
         patientId,
+        ration_seche,
       });
       await consulter_par.create({
         patientId,

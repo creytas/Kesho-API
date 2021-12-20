@@ -1,5 +1,6 @@
 const {
   patient,
+  matiere_premiere,
   cause_malnutrition,
   famille,
   anthropometriques,
@@ -13,13 +14,13 @@ const getReporting = async (req, res, next) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const nombre_garcon_now = await sequelize.query(
-        `select count(id_patient) as nombre_garcon
+        `select count(id_patient) as nombre_garcon_now
         from patients
         where sexe_patient="M" and MONTH(createdAt) = MONTH(now());`,
         { type: QueryTypes.SELECT }
       );
       const nombre_fille_now = await sequelize.query(
-        `select count(id_patient) as nombre_garcon
+        `select count(id_patient) as nombre_fille_now
         from patients
         where sexe_patient="F" and MONTH(createdAt) = MONTH(now());`,
         { type: QueryTypes.SELECT }
@@ -412,7 +413,30 @@ const getReporting = async (req, res, next) => {
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
-
+      const mais = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Maïs" },
+      });
+      const soja = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Soja" },
+      });
+      const sorgho = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Sorgho" },
+      });
+      const sucre = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Sucre" },
+      });
+      const huiles = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Huiles" },
+      });
+      const extrait_foliaires = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Ext. foliaires" },
+      });
+      const savon = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Savon" },
+      });
+      const briquettes = await matiere_premiere.findOne({
+        where: { libelle_matiere: "Briq. energ" },
+      });
       // const nombre_fille_transferer = await patient.count({
       //   where: {
       //     transferer_unt: true,
