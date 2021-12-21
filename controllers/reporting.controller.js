@@ -414,28 +414,28 @@ const getReporting = async (req, res, next) => {
         { type: QueryTypes.SELECT }
       );
       const mais = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Maïs" },
+        where: { libelle_matiere: "maïs" },
       });
       const soja = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Soja" },
+        where: { libelle_matiere: "soja" },
       });
       const sorgho = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Sorgho" },
+        where: { libelle_matiere: "sorgho" },
       });
       const sucre = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Sucre" },
+        where: { libelle_matiere: "sucre" },
       });
       const huiles = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Huiles" },
+        where: { libelle_matiere: "huiles" },
       });
       const extrait_foliaires = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Ext. foliaires" },
+        where: { libelle_matiere: "ext. foliaires" },
       });
       const savon = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Savon" },
+        where: { libelle_matiere: "savon" },
       });
       const briquettes = await matiere_premiere.findOne({
-        where: { libelle_matiere: "Briq. energ" },
+        where: { libelle_matiere: "briq. energ" },
       });
       // const nombre_fille_transferer = await patient.count({
       //   where: {
@@ -452,6 +452,7 @@ const getReporting = async (req, res, next) => {
       res.status(200).json({
         nombre_garcon_now,
         nombre_fille_now,
+        
         nombre_garcon,
         nombre_fille,
 
@@ -484,6 +485,15 @@ const getReporting = async (req, res, next) => {
 
         moderee_nombre_fille,
         moderee_nombre_garcon,
+
+        mais,
+        sorgho,
+        soja,
+        sucre,
+        extrait_foliaires,
+        huiles,
+        briquettes,
+        savon,
 
         // nombre_fille_transferer,
         // nombre_garcon_transferer,
