@@ -413,6 +413,31 @@ const getReporting = async (req, res, next) => {
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
+      const nombre_fille_transferer = await patient.count({
+        where: {
+          transferer_unt: true,
+          sexe_patient: "F",
+        },
+      });
+      const nombre_garcon_transferer = await patient.count({
+        where: {
+          transferer_unt: true,
+          sexe_patient: "M",
+        },
+      });
+      const nombre_garcon_gueri = await patient.count({
+        where: {
+          declarer_gueri: true,
+          sexe_patient: "M",
+        },
+      });
+      const nombre_fille_guerie = await patient.count({
+        where: {
+          declarer_gueri: true,
+          sexe_patient: "F",
+        },
+      });
+
       const mais = await matiere_premiere.findOne({
         where: { libelle_matiere: "maïs" },
       });
@@ -437,22 +462,11 @@ const getReporting = async (req, res, next) => {
       const briquettes = await matiere_premiere.findOne({
         where: { libelle_matiere: "briq. energ" },
       });
-      // const nombre_fille_transferer = await patient.count({
-      //   where: {
-      //     transferer_unt: true,
-      //     sexe_patient: "F",
-      //   },
-      // });
-      // const nombre_garcon_transferer = await patient.count({
-      //   where: {
-      //     transferer_unt: true,
-      //     sexe_patient: "M",
-      //   },
-      // });
+
       res.status(200).json({
         nombre_garcon_now,
         nombre_fille_now,
-        
+
         nombre_garcon,
         nombre_fille,
 
@@ -486,6 +500,12 @@ const getReporting = async (req, res, next) => {
         moderee_nombre_fille,
         moderee_nombre_garcon,
 
+        nombre_fille_transferer,
+        nombre_garcon_transferer,
+
+        nombre_garcon_gueri,
+        nombre_fille_guerie,
+
         mais,
         sorgho,
         soja,
@@ -494,9 +514,6 @@ const getReporting = async (req, res, next) => {
         huiles,
         briquettes,
         savon,
-
-        // nombre_fille_transferer,
-        // nombre_garcon_transferer,
       });
     });
   } catch (err) {

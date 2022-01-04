@@ -51,22 +51,22 @@ const getUserById = async (req, res) => {
   }
 };
 const addUser = async (req, res) => {
-  // if (req.user.is_admin == true) {
-  const result = await sequelize.transaction(async (t) => {
-    try {
-      const alreadyExistsUser = await user.findOne({
-        where: { email: req.body.email },
-      });
-      if (!alreadyExistsUser) {
-        const userCreate = await user.create(res);
-        const from = `${process.env.SENDGRID_SENDER}`;
-        const to = userCreate.email;
-        const info = {
-          to: to,
-          from: from,
-          subject: "Kesho Congo - Votre compte utilisateur",
-          text: `${userCreate.nom_user} ${userCreate.prenom_user}`,
-          html: `Bonjour ${userCreate.prenom_user}.<br/>
+  if (req.user.is_admin == true) {
+    const result = await sequelize.transaction(async (t) => {
+      try {
+        const alreadyExistsUser = await user.findOne({
+          where: { email: req.body.email },
+        });
+        if (!alreadyExistsUser) {
+          const userCreate = await user.create(res);
+          const from = `${process.env.SENDGRID_SENDER}`;
+          const to = userCreate.email;
+          const info = {
+            to: to,
+            from: from,
+            subject: "Kesho Congo - Votre compte utilisateur",
+            text: `${userCreate.nom_user} ${userCreate.prenom_user}`,
+            html: `Bonjour ${userCreate.prenom_user}.<br/>
             Nous tenons à vous informer qu'un compte utilisateur vous a été attribué.<br/>
             Voici vos identifiants:<br/>
               <ul>
@@ -79,25 +79,25 @@ const addUser = async (req, res) => {
               </ul><br/>
               Etant donné que ce sont là des informations sensibles, nous vous prions de bien les conserver.
             `,
-        };
-        const messageSent = await sendgridMail.send(info);
-        if (messageSent) {
-          return res.status(200).json({ message: "Thanks for registering" });
+          };
+          const messageSent = await sendgridMail.send(info);
+          if (messageSent) {
+            return res.status(200).json({ message: "Thanks for registering" });
+          }
+        } else {
+          return res
+            .status(400)
+            .json({ message: "User with email already exists!" });
         }
-      } else {
+      } catch (error) {
         return res
-          .status(400)
-          .json({ message: "User with email already exists!" });
+          .status(500)
+          .json({ error: `Cannot register user at the moment! : ${error}` });
       }
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ error: `Cannot register user at the moment! : ${error}` });
-    }
-  });
-  // } else {
-  //   return res.status(400).send("Access denied. You are not an admin.");
-  // }
+    });
+  } else {
+    return res.status(400).send("Access denied. You are not an admin.");
+  }
 };
 const deleteUser = async (req, res) => {
   if (req.user.is_admin !== true)
