@@ -1067,6 +1067,110 @@ const getReportingByDate = async (req, res) => {
           plain: true,
         },
       });
+      const mais = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "maïs",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const soja = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "soja",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const sorgho = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "sorgho",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const sucre = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "sucre",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const huiles = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "huiles",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const extrait_foliaires = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "ext. foliaires",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const savon = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "savon",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const briquettes = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "briq. energ",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
 
       res.status(200).json({
         nombre_garcon_now,
@@ -1096,6 +1200,18 @@ const getReportingByDate = async (req, res) => {
 
         nombre_fille_transferer,
         nombre_garcon_transferer,
+
+        nombre_fille_guerie,
+        nombre_garcon_gueri,
+
+        mais,
+        sorgho,
+        soja,
+        sucre,
+        extrait_foliaires,
+        huiles,
+        briquettes,
+        savon,
       });
     });
   } catch (err) {
@@ -1103,18 +1219,18 @@ const getReportingByDate = async (req, res) => {
   }
 };
 const month_year = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Janvier",
+  "Fevrier",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Aout",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Decembre",
 ];
 const reportingYear = async (req, res) => {
   try {
