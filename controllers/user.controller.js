@@ -1,5 +1,7 @@
 const { user, sequelize } = require("../models");
 const { compare } = require("bcrypt");
+const sendgridMail = require("@sendgrid/mail");
+sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
@@ -57,33 +59,28 @@ const addUser = async (req, res) => {
         });
         if (!alreadyExistsUser) {
           const userCreate = await user.create(res);
-          const from = process.env.MAILNAME;
+          const from = process.env.SENDGRID_SENDER;
           const to = userCreate.email;
-          // create reusable transporter object using the default SMTP transport
-          const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-              //mail de l'entreprise
-              user: process.env.MAILNAME, // ton mail
-              pass: process.env.PASSMAIL, // ton mot de passe
-            },
-          });
-          const info = await transporter.sendMail({
-            from: from, // sender address
-            to: to, // list of receivers
-            subject: "KESHO CONGO 😃", // Subject line
-            text: "Hello Jaco ?", // plain text body
-            html: `Hello ${userCreate.nom_user} ${userCreate.prenom_user} <br/>
-          Voici tes identifiants 
-           <ul>
-              <li>
-                Email : ${userCreate.email}
-              </li>
-              <li>
-                Password : <b>${res.password_brut}</b>
-              </li>
-           </ul>`, // html body
-          });
+          const info = {
+            to: to,
+            from: from,
+            subject: "KESHO CONGO - COMPTE UTILISATEUR",
+            text: `${userCreate.nom_user} ${userCreate.prenom_user}`,
+            html: `Bonjour ${userCreate.prenom_user}.<br/>
+            Nous tenons a vous informer qu'un compte utilisateur vous a ete attribue.<br/>
+            Voici vos identifiants:<br/>
+              <ul>
+                 <li>
+                   Email : ${userCreate.email}
+                 </li>
+                 <li>
+                   Password : <b>${res.password_brut}</b>
+                 </li>
+              </ul><br/>
+              Etant donnee que ce sont la des informations sensibles, veuillez nous vous en prions, de bien les conserver.
+            `,
+          };
+          sendgridMail.send(info);
           if (info) {
             return res.status(200).json({ message: "Thanks for registering" });
           }

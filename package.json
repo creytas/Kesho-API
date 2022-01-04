@@ -1,5 +1,5 @@
 {
-  "name": "API-SEQUELIZE-NODE-MYSQL",
+  "name": "kesho-cntes-app",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,6 +7,7 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
