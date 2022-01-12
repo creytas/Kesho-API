@@ -11,7 +11,6 @@ operationRouter.get("/", operationController.getAllOperations);
 operationRouter.get("/:id", operationController.getOperationById);
 operationRouter.post(
   "/",
-  [matiereExist, typeOperation],
   operationController.addOperation
 );
 operationRouter.put(
