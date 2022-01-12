@@ -78,7 +78,6 @@ const addOperation = async (req, res, next) => {
           .status(404)
           .send({ message: `matiere ${matiere.id} not found` });
       }
-      `************* origin matiere ${matiereExist.libelle_matiere} qte ${matiereExist.qte_matiere}`;
       if (type_operation === "sortie") {
         if (matiere.qte_operation > matiereExist.qte_matiere) {
           return res.status(400).send({
@@ -93,13 +92,7 @@ const addOperation = async (req, res, next) => {
       } else {
         throw new Error("uknown operation type");
       }
-      console.log(
-        `************* updated matiere ${matiereExist.libelle_matiere} qte ${matiereExist.qte_matiere}`
-      );
-      //const matiereOperation = materialTreatment(matiere, type_operation);
-      console.log(
-        `******** amount to add to material ${matiereExist.id} is ${matiereExist.qte_matiere}`
-      );
+
       const updatedMatiere = await matiere_premiere.update(
         { qte_matiere: matiereExist.qte_matiere },
         { where: { id: matiereExist.id } },
@@ -115,12 +108,6 @@ const addOperation = async (req, res, next) => {
             commentaire_operation: commentaire_operation,
           },
           { transaction }
-        );
-        console.log(
-          `the amount of ${matiereExist.libelle_matiere} updated is ${matiere.qte_operation}`
-        );
-        console.log(
-          `the amount of ${newOperation.matiere_id} updated is ${newOperation.qte_operation}`
         );
       } else {
         throw new Error("Matiere error occured");

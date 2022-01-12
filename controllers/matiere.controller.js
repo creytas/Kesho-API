@@ -33,6 +33,23 @@ const getMatiereById = async (req, res, next) => {
       res.status(500).send({ message: error.message });
     });
 };
+const getMatieresByAffectation = async (req, res, next) => {
+  const affectation = req.params.affectation;
+  await matiere_premiere
+    .findAll({
+      where: { affectation: affectation },
+    })
+    .then((data) => {
+      if (isEmpty(data)) {
+        return res.status(404).send({ message: "matiere not found" });
+      }
+      res.status(200).send(data);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
+
 const addMatiere = async (req, res, next) => {
   console.log("je suis dans add matiere");
   const transaction = await sequelize.transaction();
@@ -86,6 +103,7 @@ const deleteMatiereById = async (req, res, next) => {};
 module.exports = {
   getAllMatieres,
   getMatiereById,
+  getMatieresByAffectation,
   addMatiere,
   addMatiereQuantity,
   updateMatiere,
