@@ -173,26 +173,38 @@ const resetPassword = async (req, res) => {
   if (userFind) {
     try {
       const result = await sequelize.transaction(async (t) => {
-        const from = process.env.MAILNAME;
+        const from = `${process.env.SENDGRID_SENDER}`;
         const to = userFind.email;
         // create reusable transporter object using the default SMTP transport
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            //mail de l'entreprise
-            user: process.env.MAILNAME || "hbbaye24@gmail.com", // ton mail
-            pass: process.env.PASSMAIL || "@243Gmail@24@hb", // ton mot de passe
-          },
-        });
+        // const transporter = nodemailer.createTransport({
+        //   service: "gmail",
+        //   auth: {
+        //     //mail de l'entreprise
+        //     user: process.env.MAILNAME || "hbbaye24@gmail.com", // ton mail
+        //     pass: process.env.PASSMAIL || "@243Gmail@24@hb", // ton mot de passe
+        //   },
+        // });
         const password_generate = randomstring.generate(7);
-        const info = await transporter.sendMail({
-          from: from, // sender address
-          to: to, // list of receivers
-          subject: "Hello ✔", // Subject line
-          text: "Hello Jaco ?", // plain text body
-          html: `Hello ${userFind.nom_user} ${userFind.prenom_user} voici votre nouveau mot de passe : <b>${password_generate}</b>`, // html body
-        });
-        if (info) {
+        const info = {
+          to: to,
+          from: from,
+          subject: "Kesho Congo - Reinitialisation de mot de passe",
+          text: `${userFind.nom_user} ${userFind.prenom_user}`,
+          html: `Bonjour ${userFind.prenom_user}.<br/>
+          voici votre nouveau mot de passe : <b>${password_generate}</b><br/>
+          Etant donné que ce sont là des informations sensibles, nous vous prions de bien les conserver.
+          `,
+        };
+        const messageSent = await sendgridMail.send(info);
+        // const info = await transporter.sendMail({
+        //   from: from, // sender address
+        //   to: to, // list of receivers
+        //   subject: "Hello ✔", // Subject line
+        //   text: "Hello Jaco ?", // plain text body
+        //   html: `Hello ${userFind.nom_user} ${userFind.prenom_user} voici votre nouveau mot de passe : <b>${password_generate}</b>`, // html body
+        // });
+        const passwordSent = await sendgridMail.send(info);
+        if (passwordSent) {
           try {
             const result = await sequelize.transaction(async (t) => {
               const password = bcrypt.hashSync(password_generate, 10);
