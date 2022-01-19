@@ -112,7 +112,6 @@ const validationData = [
   body("telephone")
     .notEmpty()
     .withMessage("Cannot be empty")
-    .isMobilePhone()
     .withMessage("numéro non valide"),
   body("adresse_patient").notEmpty().withMessage("Cannot be empty"),
   body("vivre_deux_parents")
