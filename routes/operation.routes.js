@@ -9,15 +9,13 @@ const {
 
 operationRouter.get("/", operationController.getAllOperations);
 operationRouter.get("/:id", operationController.getOperationById);
-operationRouter.post(
-  "/",
-  operationController.addOperation
-);
+operationRouter.post("/", operationController.addOperation);
 operationRouter.put(
   "/:id",
   [matiereExist, quantityChange],
   operationController.updateOperation
 );
+operationRouter.get("/export", operationController.exportOperation);
 operationRouter.delete("/", operationController.deleteAllOperations);
 operationRouter.delete("/:id", operationController.deleteOperationById);
 

@@ -32,8 +32,29 @@ const { isEmpty } = require("lodash");
 // };
 
 const getAllOperations = async (req, res, next) => {
+  let { limit_start, limit_end } = res;
+  const reg = /^\d+$/;
+  const testRegexEnd = reg.test(limit_end);
+  const testRegexStart = reg.test(limit_start);
+  if (
+    (!testRegexStart && !testRegexEnd) ||
+    (limit_start == 0 && limit_end == 1)
+  ) {
+    limit_end = 30;
+    limit_start = 0;
+  } else {
+    limit_end = parseInt(limit_end);
+    limit_start = parseInt(limit_start);
+  }
   await sequelize
-    .query(queries.select_operations, { type: QueryTypes.SELECT })
+    .query(queries.select_operations, {
+      replacements: {
+        limitParamStart: limit_start,
+        limitParamEnd: limit_end,
+        plain: true,
+      },
+      type: QueryTypes.SELECT,
+    })
     .then((operations) => {
       if (isEmpty(operations)) {
         return res.status(404).send({ message: "operations not found" });
@@ -81,7 +102,7 @@ const addOperation = async (req, res, next) => {
       if (type_operation === "sortie") {
         if (matiere.qte_operation > matiereExist.qte_matiere) {
           return res.status(400).send({
-            message: `matiere ${req.matiereExist.libelle_matiere} amount is insuficient`,
+            message: `matiere ${matiereExist.libelle_matiere} amount is insuficient`,
           });
         }
         matiereExist.qte_matiere =
@@ -154,6 +175,20 @@ const updateOperation = async (req, res, next) => {
     });
   }
 };
+const exportOperation = async (req, res, next) => {
+  try {
+    const Operation = await sequelize.query(queries.export_operations, {
+      type: QueryTypes.SELECT,
+    });
+    if (!Operation) {
+      res.status(404).send({ message: "Operation not found" });
+    }
+    res.status(200).send(Operation);
+  } catch (error) {
+    res.status(500).json({ error: `${error}` });
+    console.log(error);
+  }
+};
 const deleteAllOperations = async (req, res, next) => {};
 const deleteOperationById = async (req, res, next) => {};
 
@@ -162,6 +197,7 @@ module.exports = {
   getOperationById,
   addOperation,
   updateOperation,
+  exportOperation,
   deleteAllOperations,
   deleteOperationById,
 };

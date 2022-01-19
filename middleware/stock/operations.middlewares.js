@@ -2,7 +2,6 @@ const express = require("express");
 const { matiere_premiere, operation_matiere } = require("../../models");
 
 const matiereExist = async (req, res, next) => {
-  //const matiere_id = req.body.matiere_id;
   const matieres_operation = req.body.matieres;
 
   if (matieres_operation && matieres_operation.length > 0) {
