@@ -106,10 +106,12 @@ const addOperation = async (req, res, next) => {
           });
         }
         matiereExist.qte_matiere =
-          matiereExist.qte_matiere - matiere.qte_operation;
+          parseFloat(matiereExist.qte_matiere) -
+          parseFloat(matiere.qte_operation);
       } else if (type_operation === "entrée") {
         matiereExist.qte_matiere =
-          matiereExist.qte_matiere + matiere.qte_operation;
+          parseFloat(matiereExist.qte_matiere) +
+          parseFloat(matiere.qte_operation);
       } else {
         throw new Error("uknown operation type");
       }
