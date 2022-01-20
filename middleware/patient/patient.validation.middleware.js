@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const patientValidatorAdd = express();
 
 const validationData = [
+  body("ration_seche").notEmpty().withMessage("Cannot be empty"),
   body("atcd_mas").notEmpty().withMessage("Cannot be empty"),
   body("nbre_chute").notEmpty().withMessage("Cannot be empty"),
   body("cause_dpm").notEmpty().withMessage("Cannot be empty"),
@@ -260,7 +261,7 @@ patientValidatorAdd.use(validationData, async (req, res, next) => {
   } = req.body;
 
   // Table Parametres Anthropometriques
-  const { peri_cranien, peri_brachail, poids, taille, type_malnutrition } =
+  const { peri_cranien, peri_brachail, poids, taille, type_malnutrition,ration_seche } =
     req.body;
 
   // Table Patient
