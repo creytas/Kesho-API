@@ -99,6 +99,7 @@ const addPatient = async (req, res) => {
       } = req.body;
       const userId = req.user.id;
       //Famille refactor insert
+      console.log(ration_seche);
       const newFamille = await famille.create({
         taille_famille,
         vivre_deux_parents,
