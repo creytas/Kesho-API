@@ -1240,7 +1240,8 @@ const reportingYear = async (req, res) => {
       const rapport_patient_year = [],
         rapport_mac_year = [],
         rapport_mam_year = [],
-        rapport_mas_year = [];
+        rapport_mas_year = [],
+        rapport_gueri_year = [];
       for (let i = 0; i <= month_current; i++) {
         rapport_patient_year.push(
           await sequelize.query(
@@ -1289,6 +1290,42 @@ const reportingYear = async (req, res) => {
             }
           )
         );
+        rapport_gueri_year.push(
+          await sequelize.query(
+            `select count(Pa.id_patient) as moderee_nombre from
+                  patients as Pa
+                  inner join ( 
+                    SELECT id, patientId, type_malnutrition, createdAt as Date_Consultation
+                    FROM anthropometriques
+                    WHERE createdAt IN (
+                      SELECT MAX(createdAt)
+                      FROM anthropometriques
+                      GROUP BY patientId
+                    )
+                  ) as Anthr
+                  on Anthr.patientId = Pa.id
+                  inner join (
+                  SELECT id, patientId, userId
+                  FROM consulter_pars
+                  WHERE createdAt IN (
+                      SELECT MAX(createdAt)
+                      FROM consulter_pars
+                      GROUP BY patientId
+                  )
+                  ) as Cons
+                  on Anthr.patientId = Cons.patientId
+                  where Anthr.type_malnutrition = "Guéri" AND  monthname(Pa.createdAt) = :monthParam
+                  ORDER BY Pa.id DESC`,
+            {
+              replacements: {
+                monthParam: month_year[i],
+                plain: true,
+              },
+              type: QueryTypes.SELECT,
+            }
+          )
+        );
+
         rapport_mac_year.push(
           await sequelize.query(
             `select count(Pa.id_patient) as chronique_nombre from
@@ -1365,6 +1402,7 @@ const reportingYear = async (req, res) => {
         rapport_mac_year,
         rapport_mas_year,
         rapport_mam_year,
+        rapport_gueri_year,
       });
     });
   } catch (err) {
