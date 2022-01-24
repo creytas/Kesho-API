@@ -1292,7 +1292,7 @@ const reportingYear = async (req, res) => {
         );
         rapport_gueri_year.push(
           await sequelize.query(
-            `select count(Pa.id_patient) as moderee_nombre from
+            `select count(Pa.id_patient) as gueri_nombre from
                   patients as Pa
                   inner join ( 
                     SELECT id, patientId, type_malnutrition, createdAt as Date_Consultation
