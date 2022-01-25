@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
           onUpdate: "CASCADE",
         }
       );
+      models.user.belongsToMany(
+        models.attendance,
+        { through: "user_id" },
+        {
+          // onDelete: "CASCADE",
+          onUpdate: "CASCADE",
+        }
+      );
     }
   }
   user.init(
