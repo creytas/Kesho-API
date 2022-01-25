@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class attendance extends Model {
+  class generator extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,32 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      attendance.belongsTo(models.user, {
-        foreignKey: "user_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
     }
   }
-  attendance.init(
+  generator.init(
     {
-      date: {
+      turned_on: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      user_id: {
-        type: DataTypes.INTEGER,
+      turned_off: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
-      attendance_state: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      observation: { type: DataTypes.STRING },
     },
     {
       sequelize,
-      modelName: "attendance",
+      modelName: "generator",
     }
   );
-  return attendance;
+  return generator;
 };
