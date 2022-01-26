@@ -25,7 +25,10 @@ module.exports = {
         } else {
           const jwtToken = jwt.sign(
             { id: userWithEmail.id, email: userWithEmail.email },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            {
+              expiresIn: 10, // 9 hours = 32400 //
+            }
           );
           res.status(200).json({
             message: "Welcome Back!",
@@ -33,7 +36,7 @@ module.exports = {
             name: `${userWithEmail.nom_user} ${userWithEmail.prenom_user}`,
             isAdmin: ` ${userWithEmail.is_admin}`,
             id_user: `${userWithEmail.id_user}`,
-            status : `${userWithEmail.statut}`
+            status: `${userWithEmail.statut}`,
           });
         }
       });
