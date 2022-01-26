@@ -3,34 +3,6 @@ const queries = require("../operations.sql");
 const { matiere_premiere, operation_matiere, sequelize } = require("../models");
 const { isEmpty } = require("lodash");
 
-// const materialTreatment = async (matiere, type_operation) => {
-//   const matiereExist = await matiere_premiere.findOne({
-//     where: {
-//       id: matiere.id,
-//     },
-//   });
-//   if (!matiereExist) {
-//     return res.status(404).send({ message: `matiere ${matiere.id} not found` });
-//   }
-//   `************* origin matiere ${matiereExist.libelle_matiere} qte ${matiereExist.qte_matiere}`;
-//   if (type_operation === "sortie") {
-//     if (matiere.qte_operation > matiereExist.qte_matiere) {
-//       return res.status(400).send({
-//         message: `matiere ${req.matiereExist.libelle_matiere} amount is insuficient`,
-//       });
-//     }
-//     matiereExist.qte_matiere = matiereExist.qte_matiere - matiere.qte_operation;
-//   } else if (type_operation === "entrée") {
-//     matiereExist.qte_matiere = matiereExist.qte_matiere + matiere.qte_operation;
-//   } else {
-//     throw new Error("uknown operation type");
-//   }
-//   console.log(
-//     `************* updated matiere ${matiereExist.libelle_matiere} qte ${matiereExist.qte_matiere}`
-//   );
-//   return { id: matiereExist.id, qte_matiere: matiereExist.qte_matiere };
-// };
-
 const getAllOperations = async (req, res, next) => {
   let { limit_start, limit_end } = res;
   const reg = /^\d+$/;
@@ -65,6 +37,44 @@ const getAllOperations = async (req, res, next) => {
       res.status(500).send({ message: error.message });
     });
 };
+
+const getOperationsByAffectation = async (req, res, next) => {
+  let { limit_start, limit_end } = res;
+  const affectation = req.params.affectation;
+  const reg = /^\d+$/;
+  const testRegexEnd = reg.test(limit_end);
+  const testRegexStart = reg.test(limit_start);
+  if (
+    (!testRegexStart && !testRegexEnd) ||
+    (limit_start == 0 && limit_end == 1)
+  ) {
+    limit_end = 30;
+    limit_start = 0;
+  } else {
+    limit_end = parseInt(limit_end);
+    limit_start = parseInt(limit_start);
+  }
+  await sequelize
+    .query(queries.select_operations_by_affectation, {
+      replacements: {
+        affectationParam: affectation,
+        limitParamStart: limit_start,
+        limitParamEnd: limit_end,
+        plain: true,
+      },
+      type: QueryTypes.SELECT,
+    })
+    .then((operations) => {
+      if (isEmpty(operations)) {
+        return res.status(404).send({ message: "operations not found" });
+      }
+      res.status(200).send(operations);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
+
 const getOperationById = async (req, res, next) => {
   const id = req.params.id;
   await sequelize
@@ -75,6 +85,33 @@ const getOperationById = async (req, res, next) => {
     .then((operations) => {
       if (isEmpty(operations)) {
         return res.status(404).send({ message: `operation ${id} not found` });
+      }
+      res.status(200).send(operations);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
+const getOperationByDate = async (req, res, next) => {
+  const date_operation = req.body.date_operation;
+  const affectation = req.params.affectation;
+  let { date_start, date_end } = res;
+  date_start = `${date_operation} 00:00:01`;
+  date_end = `${date_operation} 23:59:59`;
+  await sequelize
+    .query(queries.select_affectation_operations_by_date, {
+      replacements: {
+        affectationParam:affectation,
+        dateParamStart: date_start,
+        dateParamEnd: date_end,
+      },
+      type: QueryTypes.SELECT,
+    })
+    .then((operations) => {
+      if (isEmpty(operations)) {
+        return res.status(404).send({
+          message: `there is no operation found at ${date_operation}`,
+        });
       }
       res.status(200).send(operations);
     })
@@ -197,6 +234,8 @@ const deleteOperationById = async (req, res, next) => {};
 module.exports = {
   getAllOperations,
   getOperationById,
+  getOperationByDate,
+  getOperationsByAffectation,
   addOperation,
   updateOperation,
   exportOperation,

@@ -9,6 +9,14 @@ const {
 
 operationRouter.get("/", operationController.getAllOperations);
 operationRouter.get("/:id", operationController.getOperationById);
+operationRouter.get(
+  "/affectation/:affectation",
+  operationController.getOperationsByAffectation
+);
+operationRouter.post(
+  "/affectation/:affectation/search",
+  operationController.getOperationByDate
+);
 operationRouter.post("/", operationController.addOperation);
 operationRouter.put(
   "/:id",
