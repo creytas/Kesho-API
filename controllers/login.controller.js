@@ -11,7 +11,7 @@ module.exports = {
     const time =
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const late = "09:30:59";
-    const attendance_states = today && time > late ? "R" : "P";
+    const attendance_states = today === Date() && time > late ? "R" : "P";
 
     try {
       const result = await sequelize.transaction(async (t) => {

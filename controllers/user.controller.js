@@ -2,7 +2,6 @@ const { user, sequelize } = require("../models");
 const { compare } = require("bcrypt");
 const sendgridMail = require("@sendgrid/mail");
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
-const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
 const getAllUser = async (req, res) => {
