@@ -1,9 +1,18 @@
-const { user, sequelize } = require("../models");
+const { user, attendance, sequelize } = require("../models");
 const { compare } = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
   login: async (req, res) => {
+    const transaction = await sequelize.transaction();
+    const email = res.newMail,
+      password = res.newPass;
+    const today = new Date();
+    const time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const late = "09:30:59";
+    const attendance_states = today && time > late ? "R" : "P";
+
     try {
       const result = await sequelize.transaction(async (t) => {
         const email = res.newMail,
@@ -27,7 +36,7 @@ module.exports = {
             { id: userWithEmail.id, email: userWithEmail.email },
             process.env.JWT_SECRET,
             {
-              expiresIn: 10, // 9 hours = 32400 //
+              expiresIn: 32400, // 9 hours = 32400 //
             }
           );
           res.status(200).json({
@@ -38,8 +47,18 @@ module.exports = {
             id_user: `${userWithEmail.id_user}`,
             status: `${userWithEmail.statut}`,
           });
+          const attendances = {
+            date: today,
+            user_id: userWithEmail.id,
+            attendance_state: attendance_states,
+          };
+          const user_attendance = await attendance.create(attendances);
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      await transaction.rollback().then(() => {
+        res.status(500).send({ message: error.message });
+      });
+    }
   },
 };
