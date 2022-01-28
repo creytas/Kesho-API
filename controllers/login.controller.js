@@ -1,17 +1,33 @@
 const { user, attendance, sequelize } = require("../models");
 const { compare } = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const isToday = (date) => {
+  const today = new Date();
+  return (
+    today.getDate() == date.getDate() &&
+    today.getMonth() == date.getMonth() &&
+    today.getFullYear() == date.getFullYear()
+  );
+};
 
 module.exports = {
   login: async (req, res) => {
     const transaction = await sequelize.transaction();
     const email = res.newMail,
       password = res.newPass;
-    const today = new Date();
-    const time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const late = "09:30:59";
-    const attendance_states = today === Date() && time > late ? "R" : "P";
+    const current_date = new Date();
+    const late_date =
+      current_date.getFullYear() +
+      "-" +
+      (current_date.getMonth() + 1) +
+      "-" +
+      current_date.getDate() +
+      " 09:30:59";
+    console.log(
+      `current date is ${current_date} and late date is ${late_date}`
+    );
+    const attendance_states =
+      isToday(current_date) && current_date > late_date ? "R" : "P";
 
     try {
       const result = await sequelize.transaction(async (t) => {
@@ -48,7 +64,7 @@ module.exports = {
             status: `${userWithEmail.statut}`,
           });
           const attendances = {
-            date: today,
+            date: current_date,
             user_id: userWithEmail.id,
             attendance_state: attendance_states,
           };
@@ -56,9 +72,7 @@ module.exports = {
         }
       });
     } catch (error) {
-      await transaction.rollback().then(() => {
-        res.status(500).send({ message: error.message });
-      });
+      console.log(error);
     }
   },
 };
