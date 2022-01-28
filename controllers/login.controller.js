@@ -16,19 +16,19 @@ module.exports = {
     const email = res.newMail,
       password = res.newPass;
     const current_date = new Date();
-    const late_date =
-      current_date.getFullYear() +
-      "-" +
-      (current_date.getMonth() + 1) +
-      "-" +
-      current_date.getDate() +
-      " 09:30:59";
+    const late_date = new Date();
+    late_date.setHours(9, 30, 59);
+    //   current_date.getFullYear() +
+    //   "-" +
+    //   (current_date.getMonth() + 1) +
+    //   "-" +
+    //   current_date.getDate() +
+    //   " 09:30:59";
     console.log(
       `current date is ${current_date} and late date is ${late_date}`
     );
     const attendance_states =
       isToday(current_date) && current_date > late_date ? "R" : "P";
-
     try {
       const result = await sequelize.transaction(async (t) => {
         const email = res.newMail,
