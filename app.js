@@ -15,7 +15,7 @@ const routeReporting = require("./routes/reporting");
 const passport = require("passport");
 
 const corsOptions = {
-  origin: ["http://localhost:3000", /.{5,6}\/\/kesho-congo-1-.{8,}/],
+  origin: ["http://localhost:3000", /.{5,6}\/\/kesho-cntes.{8,}/],
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -26,15 +26,8 @@ const corsOptions1 = {
   optionsSuccessStatus: 200,
 };
 
-const corsOptions2 = {
-  origin: true,
-  credentials: true,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
-  optionsSuccessStatus: 200,
-};
 // app.use(cors(corsOptions));
-app.use(cors(corsOptions2));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
