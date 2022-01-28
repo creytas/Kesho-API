@@ -654,7 +654,7 @@ const searchPatient = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const Patients = await sequelize.query(
-        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date_format(Date_Consultation, "%x/%m/%v") as date_Consultation, nom_user as nom_consultant, postnom_user as postnom_consultant  from
+        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date(Date_Consultation) as date_Consultation, nom_user as nom_consultant, postnom_user as postnom_consultant  from
         patients as Pa
         inner join ( 
           SELECT id, patientId, type_malnutrition, createdAt as Date_Consultation
@@ -698,7 +698,7 @@ const exportPatient = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const Patients = await sequelize.query(
-        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date_format(Date_Consultation, "%x/%m/%v") as date_Consultation, nom_user as nom_consultant, postnom_user as postnom_consultant  from
+        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date(Date_Consultation) as date_Consultation, nom_user as nom_consultant, postnom_user as postnom_consultant  from
         patients as Pa
         inner join ( 
           SELECT id, patientId, type_malnutrition, createdAt as Date_Consultation
