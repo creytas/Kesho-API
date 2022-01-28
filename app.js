@@ -25,8 +25,16 @@ const corsOptions1 = {
   preflightContinue: false,
   optionsSuccessStatus: 200,
 };
+
+const corsOptions2 = {
+  origin: true,
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
+};
 // app.use(cors(corsOptions));
-app.use(cors(corsOptions));
+app.use(cors(corsOptions2));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
