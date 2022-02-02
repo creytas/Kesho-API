@@ -17,16 +17,7 @@ module.exports = {
       password = res.newPass;
     const current_date = new Date();
     const late_date = new Date();
-    late_date.setHours(9, 30, 59);
-    //   current_date.getFullYear() +
-    //   "-" +
-    //   (current_date.getMonth() + 1) +
-    //   "-" +
-    //   current_date.getDate() +
-    //   " 09:30:59";
-    console.log(
-      `current date is ${current_date} and late date is ${late_date}`
-    );
+    late_date.setHours(8, 30, 59);
     const attendance_states =
       isToday(current_date) && current_date > late_date ? "R" : "P";
     try {
@@ -48,6 +39,13 @@ module.exports = {
         } else if (!userWithEmail && isPasswordValid) {
           return res.status(400).json({ message: "Email not valid" });
         } else {
+          const attendances = {
+            date: current_date,
+            user_id: userWithEmail.id,
+            attendance_state: attendance_states,
+          };
+          const user_attendance = await attendance.create(attendances);
+
           const jwtToken = jwt.sign(
             { id: userWithEmail.id, email: userWithEmail.email },
             process.env.JWT_SECRET,
@@ -62,13 +60,8 @@ module.exports = {
             isAdmin: ` ${userWithEmail.is_admin}`,
             id_user: `${userWithEmail.id_user}`,
             status: `${userWithEmail.statut}`,
+            attendance: `${user_attendance.attendance_state}`,
           });
-          const attendances = {
-            date: current_date,
-            user_id: userWithEmail.id,
-            attendance_state: attendance_states,
-          };
-          const user_attendance = await attendance.create(attendances);
         }
       });
     } catch (error) {
