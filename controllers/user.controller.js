@@ -76,6 +76,7 @@ const addUser = async (req, res) => {
                    Password : <b>${res.password_brut}</b>
                  </li>
               </ul><br/>
+              Connectez-vous <a href= "https://kesho-cntes.netlify.app" target="_blank" rel="noreferrer">ici</a><br/>
               Etant donné que ce sont là des informations sensibles, nous vous prions de bien les conserver.
             `,
           };
@@ -191,6 +192,7 @@ const resetPassword = async (req, res) => {
           text: `${userFind.nom_user} ${userFind.prenom_user}`,
           html: `Bonjour ${userFind.prenom_user}.<br/>
           voici votre nouveau mot de passe : <b>${password_generate}</b><br/>
+          Connectez-vous <a href= "https://kesho-cntes.netlify.app" target="_blank" rel="noreferrer">ici</a><br/>
           Etant donné que ce sont là des informations sensibles, nous vous prions de bien les conserver.
           `,
         };
