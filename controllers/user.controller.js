@@ -5,26 +5,20 @@ sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
 const getAllUser = async (req, res) => {
-  try {
-    if (req.user.is_admin !== true)
-      return res.status(401).send("Access denied. You are not an admin.");
-
-    const userFindAll = await user.findAll({
-      attributes: [
-        "id_user",
-        "nom_user",
-        "postnom_user",
-        "prenom_user",
-        "email",
-        "sexe_user",
-        "is_admin",
-        "statut",
-      ],
-    });
-    return res.status(200).send(userFindAll);
-  } catch (error) {
-    return res.status(400).send(error);
-  }
+  const userFindAll = await user.findAll({
+    attributes: [
+      "id",
+      "id_user",
+      "nom_user",
+      "postnom_user",
+      "prenom_user",
+      "email",
+      "sexe_user",
+      "is_admin",
+      "statut",
+    ],
+  });
+  res.status(200).send(await userFindAll);
 };
 const getUserById = async (req, res) => {
   const { id_user } = res;
@@ -76,7 +70,7 @@ const addUser = async (req, res) => {
                    Password : <b>${res.password_brut}</b>
                  </li>
               </ul><br/>
-              Connectez-vous <a href= "https://kesho-cntes.netlify.app" target="_blank" rel="noreferrer">ici</a><br/>
+              Connectez-vous <b><a href= "https://kesho-cntes.netlify.app" target="_blank" rel="noreferrer">ici</a></b><br/>
               Etant donné que ce sont là des informations sensibles, nous vous prions de bien les conserver.
             `,
           };
@@ -104,13 +98,13 @@ const deleteUser = async (req, res) => {
     return res.status(400).send("Access denied. You are not an admin.");
   try {
     const result = await sequelize.transaction(async (t) => {
-      const { id_user } = res;
-      const userFind = await user.findOne({ where: { id_user } });
+      const { id } = res;
+      const userFind = await user.findOne({ where: { id } });
 
       if (userFind) {
         const userDelete = await user.destroy({
           where: {
-            id_user,
+            id,
           },
         });
         return res.status(200).json({
@@ -118,7 +112,7 @@ const deleteUser = async (req, res) => {
         });
       } else {
         return res.status(400).json({
-          message: `Le personnel ayant l'identifiant ${id_user} est introuvable`,
+          message: `Le personnel ayant l'identifiant ${id} est introuvable`,
         });
       }
     });
@@ -129,7 +123,7 @@ const deleteUser = async (req, res) => {
   }
 };
 const updateUser = async (req, res) => {
-  if (req.user.id_user !== res.id_user) {
+  if (req.user.id !== res.id) {
     return res.status(400).send("Access denied. Can't update another user.");
   }
   const verifyPassword = await compare(res.old_password, req.user.password);
@@ -139,14 +133,14 @@ const updateUser = async (req, res) => {
 
   try {
     const result = await sequelize.transaction(async (t) => {
-      const { id_user, nom_user, postnom_user, prenom_user, password } = res;
-      const userFind = await user.findOne({ where: { id_user } });
+      const { id, nom_user, postnom_user, prenom_user, password } = res;
+      const userFind = await user.findOne({ where: { id } });
       if (userFind) {
         const userUpdate = await user.update(
           { nom_user, postnom_user, prenom_user, password },
           {
             where: {
-              id_user,
+              id,
             },
           }
         );
@@ -192,7 +186,7 @@ const resetPassword = async (req, res) => {
           text: `${userFind.nom_user} ${userFind.prenom_user}`,
           html: `Bonjour ${userFind.prenom_user}.<br/>
           voici votre nouveau mot de passe : <b>${password_generate}</b><br/>
-          Connectez-vous <a href= "https://kesho-cntes.netlify.app" target="_blank" rel="noreferrer">ici</a><br/>
+          Connectez-vous <b><a href= "https://kesho-cntes.netlify.app" target="_blank" rel="noreferrer">ici</a></b><br/>
           Etant donné que ce sont là des informations sensibles, nous vous prions de bien les conserver.
           `,
         };
@@ -247,11 +241,11 @@ const resetPassword = async (req, res) => {
   }
 };
 const updateStatusUser = async (req, res) => {
-  const { id_user, statut } = res;
+  const { id, statut } = res;
   if (req.user.is_admin !== true) {
     return res.status(400).send("Access denied. Can't update another user.");
   }
-  const userFind = await user.findOne({ where: { id_user } });
+  const userFind = await user.findOne({ where: { id } });
   try {
     const result = await sequelize.transaction(async (t) => {
       if (userFind) {
@@ -259,7 +253,7 @@ const updateStatusUser = async (req, res) => {
           { statut },
           {
             where: {
-              id_user: id_user,
+              id: id,
             },
           }
         );
@@ -268,7 +262,7 @@ const updateStatusUser = async (req, res) => {
         });
       } else {
         return res.status(400).json({
-          message: `Le personnel ayant l'identifiant ${id_user} est introuvable`,
+          message: `Le personnel ayant l'identifiant ${id} est introuvable`,
         });
       }
     });

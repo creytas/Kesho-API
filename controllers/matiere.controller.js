@@ -51,7 +51,6 @@ const getMatieresByAffectation = async (req, res, next) => {
 };
 
 const addMatiere = async (req, res, next) => {
-  console.log("je suis dans add matiere");
   const transaction = await sequelize.transaction();
   const {
     libelle_matiere,
