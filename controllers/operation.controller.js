@@ -54,7 +54,9 @@ const getOperationsByAffectation = async (req, res, next) => {
     limit_end = parseInt(limit_end);
     limit_start = parseInt(limit_start);
   }
-  console.log(limit_end);
+
+  const data_amount = await operation_matiere.count();
+  console.log(limit_end, data_amount);
   await sequelize
     .query(queries.select_operations_by_affectation, {
       replacements: {
@@ -69,7 +71,7 @@ const getOperationsByAffectation = async (req, res, next) => {
       if (isEmpty(operations)) {
         return res.status(404).send({ message: "operations not found" });
       }
-      res.status(200).send(operations);
+      res.status(200).send({operations,data_amount});
     })
     .catch((error) => {
       res.status(500).send({ message: error.message });
