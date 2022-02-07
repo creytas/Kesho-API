@@ -39,7 +39,7 @@ const getAllOperations = async (req, res, next) => {
 };
 
 const getOperationsByAffectation = async (req, res, next) => {
-  let { limit_start, limit_end } = res;
+  let { limit_start, limit_end } = req.query;
   const affectation = req.params.affectation;
   const reg = /^\d+$/;
   const testRegexEnd = reg.test(limit_end);
@@ -54,6 +54,7 @@ const getOperationsByAffectation = async (req, res, next) => {
     limit_end = parseInt(limit_end);
     limit_start = parseInt(limit_start);
   }
+  console.log(limit_end);
   await sequelize
     .query(queries.select_operations_by_affectation, {
       replacements: {
@@ -101,7 +102,7 @@ const getOperationByDate = async (req, res, next) => {
   await sequelize
     .query(queries.select_affectation_operations_by_date, {
       replacements: {
-        affectationParam:affectation,
+        affectationParam: affectation,
         dateParamStart: date_start,
         dateParamEnd: date_end,
       },

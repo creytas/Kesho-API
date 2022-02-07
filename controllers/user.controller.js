@@ -25,6 +25,7 @@ const getUserById = async (req, res) => {
   const userOne = await user.findOne({
     where: { id_user },
     attributes: [
+      "id",
       "id_user",
       "nom_user",
       "postnom_user",
@@ -39,7 +40,7 @@ const getUserById = async (req, res) => {
     return res.status(200).json(userOne);
   } else {
     return res.status(401).json({
-      message: `Le personnel ayant l'identifiant ${id_user} est introuvable`,
+      message: `Le personnel ayant l'identifiant ${id} est introuvable`,
     });
   }
 };
