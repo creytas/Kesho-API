@@ -59,6 +59,7 @@ module.exports = {
             name: `${userWithEmail.nom_user} ${userWithEmail.prenom_user}`,
             isAdmin: ` ${userWithEmail.is_admin}`,
             id_user: `${userWithEmail.id_user}`,
+            id: `${userWithEmail.id}`,
             status: `${userWithEmail.statut}`,
             attendance: `${user_attendance.attendance_state}`,
           });
