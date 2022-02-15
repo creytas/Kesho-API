@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { updateUser } = require("../../controllers/user.controller");
 const { query, body, validationResult } = require("express-validator");
 const validationData = [
-  query("id_user")
+  query("id")
     .notEmpty()
     .withMessage("Cannot be empty")
     .matches(/\d/)
