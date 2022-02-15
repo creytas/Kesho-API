@@ -39,7 +39,7 @@ const userUpdateMiddleware = express();
 
 userUpdateMiddleware.use(validationData, (req, res, next) => {
   let { id } = req.query;
-  let { id_user } = req.query;
+  //let { id_user } = req.query;
   let { nom_user, postnom_user, prenom_user, old_password, password } =
     req.body;
 
@@ -50,7 +50,7 @@ userUpdateMiddleware.use(validationData, (req, res, next) => {
   password = bcrypt.hashSync(password, 10);
   res.old_password = old_password;
   res.id = id;
-  res.id_user = id_user;
+  //res.id_user = id_user;
   res.nom_user = nom_user;
   res.postnom_user = postnom_user;
   res.prenom_user = prenom_user;
