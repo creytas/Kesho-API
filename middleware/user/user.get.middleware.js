@@ -6,16 +6,16 @@ const getUserMiddleware = express();
 
 getUserMiddleware.use(
   [
-    param("id_user").isEmpty().withMessage("paramètre manquant"),
+    param("id").isEmpty().withMessage("paramètre manquant"),
   ],
   (req, res, next) => {
-    let { id_user } = req.query;
+    let { id } = req.query;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    res.id_user = id_user;
+    res.id = id;
     next();
   }
 );

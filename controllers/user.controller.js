@@ -21,9 +21,9 @@ const getAllUser = async (req, res) => {
   res.status(200).send(await userFindAll);
 };
 const getUserById = async (req, res) => {
-  const { id_user } = res;
+  const { id } = res;
   const userOne = await user.findOne({
-    where: { id_user },
+    where: { id: id },
     attributes: [
       "id",
       "id_user",
