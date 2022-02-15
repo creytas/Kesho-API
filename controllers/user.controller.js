@@ -246,7 +246,7 @@ const updateStatusUser = async (req, res) => {
   if (req.user.is_admin !== true) {
     return res.status(400).send("Access denied. Can't update another user.");
   }
-  const userFind = await user.findOne({ where: { id } });
+  const userFind = await user.findOne({ where: { id: id } });
   try {
     const result = await sequelize.transaction(async (t) => {
       if (userFind) {

@@ -39,6 +39,7 @@ const userUpdateMiddleware = express();
 
 userUpdateMiddleware.use(validationData, (req, res, next) => {
   let { id } = req.query;
+  console.log(`${id} ${prenom_user} ${old_password}`);
   //let { id_user } = req.query;
   let { nom_user, postnom_user, prenom_user, old_password, password } =
     req.body;
