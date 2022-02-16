@@ -14,7 +14,7 @@ userValidatorStatusMiddleware.use(
       .notEmpty()
       .withMessage("Cannot be empty")
       .matches(/\w/)
-      .withMessage("must contain a number"),
+      .withMessage("must contain words"),
   ],
   (req, res, next) => {
     const errors = validationResult(req);

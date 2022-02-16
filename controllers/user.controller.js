@@ -243,6 +243,7 @@ const resetPassword = async (req, res) => {
 };
 const updateStatusUser = async (req, res) => {
   const { id, statut } = res;
+  console.log(statut);
   if (req.user.is_admin !== true) {
     return res.status(400).send("Access denied. Can't update another user.");
   }
@@ -251,7 +252,7 @@ const updateStatusUser = async (req, res) => {
     const result = await sequelize.transaction(async (t) => {
       if (userFind) {
         const userUpdate = await user.update(
-          { statut },
+          { statut: statut },
           {
             where: {
               id: id,
@@ -259,7 +260,7 @@ const updateStatusUser = async (req, res) => {
           }
         );
         return res.status(200).json({
-          message: `Mise à jour effectuée avec succès`,
+          message: `Mise à jour de ${userFind.id} effectuée avec succès`,
         });
       } else {
         return res.status(400).json({
