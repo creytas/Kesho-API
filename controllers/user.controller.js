@@ -192,13 +192,7 @@ const resetPassword = async (req, res) => {
           `,
         };
         const messageSent = await sendgridMail.send(info);
-        // const info = await transporter.sendMail({
-        //   from: from, // sender address
-        //   to: to, // list of receivers
-        //   subject: "Hello ✔", // Subject line
-        //   text: "Hello Jaco ?", // plain text body
-        //   html: `Hello ${userFind.nom_user} ${userFind.prenom_user} voici votre nouveau mot de passe : <b>${password_generate}</b>`, // html body
-        // });
+
         const passwordSent = await sendgridMail.send(info);
         if (passwordSent) {
           try {
