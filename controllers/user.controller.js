@@ -124,7 +124,8 @@ const deleteUser = async (req, res) => {
   }
 };
 const updateUser = async (req, res) => {
-  if (req.user.id !== res.id) {
+  console.log(`req.user.id = ${req.user.id} et res.id = ${res.id}`);
+  if (req.user.id != res.id) {
     return res.status(400).send("Access denied. Can't update another user.");
   }
   const verifyPassword = await compare(res.old_password, req.user.password);
