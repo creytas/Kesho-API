@@ -22,7 +22,7 @@ const addPatient = async (req, res) => {
         ration_seche,
         atcd_mas,
         nbre_chute,
-        date_naissance_tuteur,
+        age_tuteur,
         terme_grossesse,
         sejour_neonat,
         eig,
@@ -136,7 +136,7 @@ const addPatient = async (req, res) => {
         tbc_declarer_finie,
         nom_tuteur,
         taille_menage,
-        date_naissance_tuteur,
+        age_tuteur,
       });
       const id_famille = await newFamille.id;
 
@@ -315,7 +315,7 @@ const updatePatient = async (req, res) => {
         const {
           atcd_mas,
           nbre_chute,
-          date_naissance_tuteur,
+          age_tuteur,
           terme_grossesse,
           sejour_neonat,
           eig,
@@ -444,7 +444,7 @@ const updatePatient = async (req, res) => {
               duree_traitement_tbc,
               tbc_declarer_finie,
               nom_tuteur,
-              date_naissance_tuteur,
+              age_tuteur,
             },
             {
               where: {
