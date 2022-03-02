@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
       poids_naissance: DataTypes.FLOAT,
       telephone: DataTypes.STRING,
       familleId: DataTypes.INTEGER,
-      transferer_unt : DataTypes.BOOLEAN,
-      declarer_gueri : DataTypes.BOOLEAN,
+      transferer_unt: DataTypes.BOOLEAN,
+      declarer_gueri: DataTypes.BOOLEAN,
     },
     {
       sequelize,

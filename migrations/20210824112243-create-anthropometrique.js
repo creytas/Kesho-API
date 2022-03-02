@@ -12,8 +12,28 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
+      date_admission_patient:{
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+      date_guerison_patient:{
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+      first_picture: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      last_picture: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      commentaires: {
+        allowNull: true,
+        type: Sequelize.TEXT,
+      },
       peri_cranien: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.FLOAT,
       },
       peri_brachial: {

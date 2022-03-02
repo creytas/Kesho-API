@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       prenom_patient: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       sexe_patient: {

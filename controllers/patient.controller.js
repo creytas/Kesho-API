@@ -14,6 +14,11 @@ const addPatient = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const {
+        first_picture,
+        last_picture,
+        date_admission_patient,
+        date_guerison_patient,
+        commentaires,
         ration_seche,
         atcd_mas,
         nbre_chute,
@@ -99,7 +104,6 @@ const addPatient = async (req, res) => {
       } = req.body;
       const userId = req.user.id;
       //Famille refactor insert
-      console.log(ration_seche);
       const newFamille = await famille.create({
         taille_famille,
         vivre_deux_parents,
@@ -164,6 +168,11 @@ const addPatient = async (req, res) => {
         type_malnutrition,
         patientId,
         ration_seche,
+        first_picture,
+        last_picture,
+        date_admission_patient,
+        date_guerison_patient,
+        commentaires,
       });
       await consulter_par.create({
         patientId,
@@ -251,6 +260,11 @@ const getPatient = async (req, res) => {
             "poids",
             "taille",
             "type_malnutrition",
+            "first_picture",
+            "last_picture",
+            "date_admission_patient",
+            "date_guerison_patient",
+            "commentaires",
             "createdAt",
           ],
         });
@@ -612,6 +626,11 @@ const detailPatient = async (req, res) => {
           where: { patientId: id_patient },
           order: [["id", "DESC"]],
           attributes: [
+            "date_admission_patient",
+            "date_guerison_patient",
+            "first_picture",
+            "last_picture",
+            "commentaires",
             "peri_cranien",
             "peri_brachial",
             "poids",
@@ -698,10 +717,10 @@ const exportPatient = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const Patients = await sequelize.query(
-        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date(Date_Consultation) as date_Consultation, nom_user as nom_consultant, postnom_user as postnom_consultant  from
+        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, Anthr.date_admission_patient, Anthr.peri_cranien, Anthr.peri_brachial, Anthr.poids, Anthr.taille, Anthr.type_malnutrition, Anthr.date_guerison_patient, Anthr.commentaires, date(Date_Consultation) as date_Consultation, nom_user as nom_consultant, postnom_user as postnom_consultant  from
         patients as Pa
         inner join ( 
-          SELECT id, patientId, type_malnutrition, createdAt as Date_Consultation
+          SELECT id, patientId,date_admission_patient,peri_cranien,peri_brachial,poids,taille,type_malnutrition,date_guerison_patient,commentaires, createdAt as Date_Consultation
           FROM anthropometriques
           WHERE createdAt IN (
             SELECT MAX(createdAt)
