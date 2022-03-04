@@ -45,11 +45,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       dpm: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       cause_dpm: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.TEXT,
       },
       calendrier_vaccinal: {

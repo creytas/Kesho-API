@@ -5,26 +5,26 @@ const { body, validationResult } = require("express-validator");
 const patientValidatorAdd = express();
 
 const validationData = [
-  body("ration_seche").notEmpty().withMessage("Cannot be empty"),
-  body("atcd_mas").notEmpty().withMessage("Cannot be empty"),
-  body("nbre_chute").notEmpty().withMessage("Cannot be empty"),
-  body("cause_dpm").notEmpty().withMessage("Cannot be empty"),
+  body("ration_seche"),
+  body("atcd_mas"),
+  body("nbre_chute"),
+  body("cause_dpm"),
   body("terme_grossesse").notEmpty().withMessage("Cannot be empty"),
-  body("sejour_neonat").notEmpty().withMessage("Cannot be empty"),
-  body("eig").notEmpty().withMessage("Cannot be empty"),
-  body("lieu_accouchement").notEmpty().withMessage("Cannot be empty"),
-  body("asphyxie_perinatal").notEmpty().withMessage("Cannot be empty"),
-  body("dpm").notEmpty().withMessage("Cannot be empty"),
+  body("sejour_neonat"),
+  body("eig"),
+  body("lieu_accouchement"),
+  body("asphyxie_perinatal"),
+  body("dpm"),
   body("produit_plante")
     .notEmpty()
     .withMessage("Cannot be empty")
     .isBoolean()
     .withMessage("c'est un champ boolean"),
-  body("rang_fratrie").notEmpty().withMessage("Cannot be empty"),
-  body("taille_fratrie").notEmpty().withMessage("Cannot be empty"),
-  body("atcd_rougeole_fratrie").notEmpty().withMessage("Cannot be empty"),
-  body("vaccination_rougeole").notEmpty().withMessage("Cannot be empty"),
-  body("terrain_vih").notEmpty().withMessage("Cannot be empty"),
+  body("rang_fratrie"),
+  body("taille_fratrie"),
+  body("atcd_rougeole_fratrie"),
+  body("vaccination_rougeole"),
+  body("terrain_vih"),
   body("tbc")
     .notEmpty()
     .withMessage("Cannot be empty")
@@ -44,9 +44,9 @@ const validationData = [
     .notEmpty()
     .withMessage("Cannot be empty"),
   body("duree_prise_atb")
-  .matches(/\w{1,}/)
-  .withMessage("la taille inférieur à 1"),
-  body("peri_cranien").notEmpty().withMessage("Cannot be empty"),
+    .matches(/\w{1,}/)
+    .withMessage("la taille inférieur à 1"),
+  body("peri_cranien"),
   body("peri_brachial").notEmpty().withMessage("Cannot be empty"),
   body("poids")
     .notEmpty()
@@ -64,13 +64,9 @@ const validationData = [
     .matches(/[A-Za-z]{3,4}/)
     .withMessage("la taille inférieur à 3"),
   body("type_statut_marital")
-    .notEmpty()
-    .withMessage("Cannot be empty")
     .matches(/[A-Za-z]{4,}/)
     .withMessage("la taille inférieur à 4"),
   body("statut_marital")
-    .notEmpty()
-    .withMessage("Cannot be empty")
     .matches(/[A-Za-z]{4,}/)
     .withMessage("la taille inférieur à 4"),
   body("nom_patient")
@@ -84,10 +80,8 @@ const validationData = [
     .matches(/[A-Za-z]{2,}/)
     .withMessage("la taille inférieur à 4 et pas de chiffres"),
   body("prenom_patient")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .matches(/[A-Za-z]{2,}/)
-    .withMessage("la taille inférieur à 4 et pas de chiffres"),
+    .matches(/[A-Za-z]/)
+    .withMessage("characters are alphabetic only"),
   body("sexe_patient")
     .notEmpty()
     .withMessage("Cannot be empty")
@@ -99,22 +93,11 @@ const validationData = [
     .withMessage("Cannot be empty")
     .matches(/\d{1,3}/)
     .withMessage("pas de lettres"),
-  body("transferer_unt")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .isBoolean()
-    .withMessage("c'est un champ boolean"),
-  body("declarer_gueri")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .isBoolean()
-    .withMessage("c'est un champ boolean"),
+  body("transferer_unt").isBoolean().withMessage("c'est un champ boolean"),
+  body("declarer_gueri").isBoolean().withMessage("c'est un champ boolean"),
   body("diversification_aliment").notEmpty().withMessage("Cannot be empty"),
-  body("telephone")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .withMessage("numéro non valide"),
-  body("adresse_patient").notEmpty().withMessage("Cannot be empty"),
+  body("telephone"),
+  body("adresse_patient"),
   body("vivre_deux_parents")
     .notEmpty()
     .withMessage("Cannot be empty")
@@ -179,28 +162,20 @@ const validationData = [
     .withMessage("Cannot be empty")
     .isBoolean()
     .withMessage("c'est un champ boolean"),
-  body("atb").notEmpty().withMessage("Cannot be empty"),
-  body("liste_atb").notEmpty().withMessage("Cannot be empty"),
-  body("mas_fratrie").notEmpty().withMessage("Cannot be empty"),
-  body("tbc_chez").notEmpty().withMessage("Cannot be empty"),
-  body("tbc_gueris").notEmpty().withMessage("Cannot be empty"),
-  body("duree_traitement_tbc").notEmpty().withMessage("Cannot be empty"),
-  body("tbc_declarer_finie").notEmpty().withMessage("Cannot be empty"),
+  body("atb"),
+  body("liste_atb"),
+  body("mas_fratrie"),
+  body("tbc_chez"),
+  body("tbc_gueris"),
+  body("duree_traitement_tbc"),
+  body("tbc_declarer_finie"),
   body("nom_tuteur")
-    .notEmpty()
-    .withMessage("Cannot be empty")
     .matches(/\w{2,}/)
     .withMessage("la taille inférieur à 2"),
   body("taille_menage")
-    .notEmpty()
-    .withMessage("Cannot be empty")
     .matches(/\d{1,3}/)
     .withMessage("pas de lettres"),
-  body("tbc_parents")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .isBoolean()
-    .withMessage("c'est un champ boolean"),
+  body("tbc_parents").isBoolean().withMessage("c'est un champ boolean"),
   body("calendrier_vaccinal").notEmpty().withMessage("Cannot be empty"),
   body("vaccin_non_recu")
     .matches(/[A-Za-z]{3,}/)
@@ -213,24 +188,16 @@ const validationData = [
     .withMessage("Cannot be empty")
     .isDate()
     .withMessage("date not validated"),
-  body("date_naissance_tuteur")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .isDate()
-    .withMessage("date not validated"),
+  body("age_tuteur"),
   body("allaitement_6mois")
     .notEmpty()
     .withMessage("Cannot be empty")
     .isBoolean()
     .withMessage("c'est un champ boolean"),
-  body("age_fin_allaitement").notEmpty().withMessage("Cannot be empty"),
-  body("traitement_nutri").notEmpty().withMessage("Cannot be empty"),
+  body("age_fin_allaitement"),
+  body("traitement_nutri"),
   body("cocktail_atb").isBoolean().withMessage("c'est un champ boolean"),
-  body("transferer_unt")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .isBoolean()
-    .withMessage("c'est un champ boolean"),
+  body("transferer_unt").isBoolean().withMessage("c'est un champ boolean"),
 ];
 patientValidatorAdd.use(validationData, async (req, res, next) => {
   // Cause malnutrition
@@ -261,8 +228,19 @@ patientValidatorAdd.use(validationData, async (req, res, next) => {
   } = req.body;
 
   // Table Parametres Anthropometriques
-  const { peri_cranien, peri_brachail, poids, taille, type_malnutrition,ration_seche } =
-    req.body;
+  const {
+    peri_cranien,
+    peri_brachail,
+    poids,
+    taille,
+    type_malnutrition,
+    ration_seche,
+    date_admission_patient,
+    date_guerison_patient,
+    first_picture,
+    last_picture,
+    commentaires
+  } = req.body;
 
   // Table Patient
   const {
@@ -291,6 +269,7 @@ patientValidatorAdd.use(validationData, async (req, res, next) => {
     profession_mere,
     profession_chef_menage,
     age_mere,
+    age_tuteur,
     scolarite_mere,
     contraception_mere,
     contraception_moderne,
