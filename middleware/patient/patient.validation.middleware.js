@@ -79,9 +79,7 @@ const validationData = [
     .withMessage("Cannot be empty")
     .matches(/[A-Za-z]{2,}/)
     .withMessage("la taille inférieur à 4 et pas de chiffres"),
-  body("prenom_patient")
-    .matches(/[A-Za-z]/)
-    .withMessage("characters are alphabetic only"),
+  body("prenom_patient"),
   body("sexe_patient")
     .notEmpty()
     .withMessage("Cannot be empty")
@@ -122,9 +120,7 @@ const validationData = [
   body("profession_chef_menage").notEmpty().withMessage("Cannot be empty"),
   body("age_mere")
     .notEmpty()
-    .withMessage("Cannot be empty")
-    .isDate()
-    .withMessage("date not validated"),
+    .withMessage("Cannot be empty"),
   body("scolarite_mere").notEmpty().withMessage("Cannot be empty"),
   body("contraception_mere").isBoolean().withMessage("c'est un champ boolean"),
   body("type_contraception")
@@ -180,9 +176,7 @@ const validationData = [
   body("vaccin_non_recu")
     .matches(/[A-Za-z]{3,}/)
     .withMessage("la taille inférieur à 4"),
-  body("duree_produit_plante")
-    .matches(/\w{2,}/)
-    .withMessage("la taille supérieur à 1"),
+  body("duree_produit_plante"),
   body("date_naissance_patient")
     .notEmpty()
     .withMessage("Cannot be empty")
