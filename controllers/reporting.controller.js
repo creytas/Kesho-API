@@ -897,7 +897,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAC" AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where Anthr.type_malnutrition = "MC" AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -931,7 +931,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAC" AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where Anthr.type_malnutrition = "MC" AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -1350,7 +1350,7 @@ const reportingYear = async (req, res) => {
                   )
                   ) as Cons
                   on Anthr.patientId = Cons.patientId
-                  where Anthr.type_malnutrition = "MAC" AND monthname(Pa.createdAt) = :monthParam
+                  where Anthr.type_malnutrition = "MC" AND monthname(Pa.createdAt) = :monthParam
                   ORDER BY Pa.id DESC`,
             {
               replacements: {
