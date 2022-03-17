@@ -19,6 +19,8 @@ const addAnthropometrique = async (req, res) => {
         type_malnutrition,
         date_examen,
         ration_seche,
+        commentaires,
+        date_admission_patient,
       } = req.body;
       const { id_patient } = req.query;
       const { id_user } = req.user;
@@ -34,7 +36,12 @@ const addAnthropometrique = async (req, res) => {
       if (patientFind && userFind) {
         const patientId = patientFind.id,
           userId = userFind.id;
-
+        //type_malnutrition==="Guéri"?date_guerison_patient:new Date():"";
+        if (type_malnutrition === "Guéri") {
+          date_guerison_patient = new Date();
+        } else {
+          date_guerison_patient = null;
+        }
         await anthropometrique.create({
           peri_cranien,
           peri_brachial,
@@ -44,6 +51,9 @@ const addAnthropometrique = async (req, res) => {
           date_examen,
           patientId,
           ration_seche,
+          commentaires,
+          date_admission_patient,
+          date_guerison_patient,
         });
 
         if (patientFind.transferer_unt) {
