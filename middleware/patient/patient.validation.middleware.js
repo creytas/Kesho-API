@@ -101,11 +101,6 @@ const validationData = [
     .withMessage("Cannot be empty")
     .isBoolean()
     .withMessage("c'est un champ boolean"),
-  body("mere_enceinte")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .isBoolean()
-    .withMessage("c'est un champ boolean"),
   body("mere_en_vie")
     .notEmpty()
     .withMessage("Cannot be empty")
@@ -165,9 +160,6 @@ const validationData = [
   body("tbc_gueris"),
   body("duree_traitement_tbc"),
   body("tbc_declarer_finie"),
-  body("nom_tuteur")
-    .matches(/\w{2,}/)
-    .withMessage("la taille inférieur à 2"),
   body("taille_menage")
     .matches(/\d{1,3}/)
     .withMessage("pas de lettres"),
@@ -229,6 +221,7 @@ patientValidatorAdd.use(validationData, async (req, res, next) => {
     taille,
     type_malnutrition,
     ration_seche,
+    type_oedeme,
     date_admission_patient,
     date_guerison_patient,
     first_picture,
@@ -257,7 +250,7 @@ patientValidatorAdd.use(validationData, async (req, res, next) => {
   const {
     taille_famille,
     vivre_deux_parents,
-    mere_enceinte,
+    etat_mere,
     mere_en_vie,
     pere_en_vie,
     profession_mere,
@@ -282,7 +275,7 @@ patientValidatorAdd.use(validationData, async (req, res, next) => {
     tbc_gueris,
     duree_traitement_tbc,
     tbc_declarer_finie,
-    nom_tuteur,
+    tuteur,
   } = req.body;
   const errors = validationResult(req);
   // erreur pour voir si le champs est vide
