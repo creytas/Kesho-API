@@ -19,6 +19,7 @@ const addAnthropometrique = async (req, res) => {
         type_malnutrition,
         date_examen,
         ration_seche,
+        type_oedeme,
         commentaires,
         date_admission_patient,
       } = req.body;
@@ -51,6 +52,7 @@ const addAnthropometrique = async (req, res) => {
           date_examen,
           patientId,
           ration_seche,
+          type_oedeme,
           commentaires,
           date_admission_patient,
           date_guerison_patient,

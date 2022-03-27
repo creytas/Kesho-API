@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     poids: DataTypes.FLOAT,
     taille: DataTypes.FLOAT,
     ration_seche: DataTypes.BOOLEAN,
+    type_oedeme:DataTypes.STRING,
     type_malnutrition: DataTypes.STRING,
     patientId: DataTypes.INTEGER
   }, {

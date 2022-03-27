@@ -20,15 +20,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN,
       },
-      nom_tuteur: {
-        allowNull: false,
+      tuteur: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       age_tuteur: {
         allowNull: true,
         type: Sequelize.INTEGER,
       },
-      mere_enceinte: {
+      etat_mere: {
         allowNull: true,
         type: Sequelize.STRING,
       },

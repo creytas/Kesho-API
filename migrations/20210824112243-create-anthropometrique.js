@@ -12,11 +12,11 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      date_admission_patient:{
+      date_admission_patient: {
         allowNull: true,
         type: Sequelize.DATE,
       },
-      date_guerison_patient:{
+      date_guerison_patient: {
         allowNull: true,
         type: Sequelize.DATE,
       },
@@ -51,6 +51,10 @@ module.exports = {
       ration_seche: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+      },
+      type_oedeme: {
+        allowNull: true,
+        type: Sequelize.STRING,
       },
       type_malnutrition: {
         allowNull: false,
