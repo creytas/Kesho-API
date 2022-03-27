@@ -267,12 +267,14 @@ const getPatient = async (req, res) => {
             "date_admission_patient",
             "date_guerison_patient",
             "commentaires",
+            "ration_seche",
+            "type_oedeme",
             "createdAt",
           ],
         });
         const Famille = await famille.findOne({
           where: { id: id_famillePatient },
-          attributes: ["nom_tuteur"],
+          attributes: ["tuteur"],
         });
         const consultant = await consulter_par.findOne({
           where: { patientId: id_patient },
