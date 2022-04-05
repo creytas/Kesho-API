@@ -217,7 +217,7 @@ const getReporting = async (req, res, next) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-M" and Pa.sexe_patient = "F" and MONTH(Pa.createdAt) = MONTH(now())  
+        where (Anthr.type_malnutrition = "MAS-M" OR Anthr.type_malnutrition = "MAS-M / FMC") and Pa.sexe_patient = "F" and MONTH(Pa.createdAt) = MONTH(now())  
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
@@ -244,7 +244,7 @@ const getReporting = async (req, res, next) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-M" and Pa.sexe_patient = "M" and MONTH(Pa.createdAt) = MONTH(now())  
+        where (Anthr.type_malnutrition = "MAS-M" OR Anthr.type_malnutrition = "MAS-M / FMC") and Pa.sexe_patient = "M" and MONTH(Pa.createdAt) = MONTH(now())  
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
@@ -272,7 +272,7 @@ const getReporting = async (req, res, next) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-K" and Pa.sexe_patient = "F" and MONTH(Pa.createdAt) = MONTH(now())  
+        where (Anthr.type_malnutrition = "MAS-K" OR Anthr.type_malnutrition = "MAS-K / FMC") and Pa.sexe_patient = "F" and MONTH(Pa.createdAt) = MONTH(now())  
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
@@ -299,7 +299,7 @@ const getReporting = async (req, res, next) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-K" and Pa.sexe_patient = "M" and MONTH(Pa.createdAt) = MONTH(now())  
+        where (Anthr.type_malnutrition = "MAS-K" OR Anthr.type_malnutrition = "MAS-K / FMC") and Pa.sexe_patient = "M" and MONTH(Pa.createdAt) = MONTH(now())  
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
@@ -382,7 +382,7 @@ const getReporting = async (req, res, next) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAM" and Pa.sexe_patient = "F" and MONTH(Pa.createdAt) = MONTH(now()) 
+        where (Anthr.type_malnutrition = "MAM" OR Anthr.type_malnutrition = "MAM / FMC") and Pa.sexe_patient = "F" and MONTH(Pa.createdAt) = MONTH(now()) 
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
@@ -409,7 +409,7 @@ const getReporting = async (req, res, next) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAM" and Pa.sexe_patient = "M" and MONTH(Pa.createdAt) = MONTH(now()) 
+        where (Anthr.type_malnutrition = "MAM" OR Anthr.type_malnutrition = "MAM / FMC") and Pa.sexe_patient = "M" and MONTH(Pa.createdAt) = MONTH(now()) 
         ORDER BY Pa.id DESC`,
         { type: QueryTypes.SELECT }
       );
@@ -790,7 +790,7 @@ const getReportingByDate = async (req, res) => {
             SELECT MAX(createdAt)
             FROM consulter_pars
             GROUP BY patientId
-        )
+          )
         ) as Cons
         on Anthr.patientId = Cons.patientId
         where (Anthr.type_malnutrition = "MAS-M" OR Anthr.type_malnutrition = "MAS-M / FMC") AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
