@@ -759,7 +759,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-M" AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where (Anthr.type_malnutrition = "MAS-M" OR Anthr.type_malnutrition = "MAS-M / FMC") AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -793,7 +793,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-M" AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where (Anthr.type_malnutrition = "MAS-M" OR Anthr.type_malnutrition = "MAS-M / FMC") AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -828,7 +828,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-K" AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where (Anthr.type_malnutrition = "MAS-K" OR Anthr.type_malnutrition = "MAS-K / FMC") AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -862,7 +862,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAS-K" AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where (Anthr.type_malnutrition = "MAS-K" OR Anthr.type_malnutrition = "MAS-K / FMC") AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -966,7 +966,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAM" AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where (Anthr.type_malnutrition = "MAM" OR Anthr.type_malnutrition = "MAM / FMC") AND Pa.sexe_patient = "F" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -1000,7 +1000,7 @@ const getReportingByDate = async (req, res) => {
         )
         ) as Cons
         on Anthr.patientId = Cons.patientId
-        where Anthr.type_malnutrition = "MAM" AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
+        where (Anthr.type_malnutrition = "MAM" OR Anthr.type_malnutrition = "MAM / FMC") AND Pa.sexe_patient = "M" AND Pa.createdAt BETWEEN (:starting_date) AND (:ending_date)
         ORDER BY Pa.id DESC`,
         {
           replacements: {
@@ -1279,7 +1279,7 @@ const reportingYear = async (req, res) => {
                   )
                   ) as Cons
                   on Anthr.patientId = Cons.patientId
-                  where Anthr.type_malnutrition = "MAM" AND  monthname(Pa.createdAt) = :monthParam
+                  where (Anthr.type_malnutrition = "MAM" OR Anthr.type_malnutrition = "MAM / FMC") AND  monthname(Pa.createdAt) = :monthParam
                   ORDER BY Pa.id DESC`,
             {
               replacements: {
@@ -1385,7 +1385,7 @@ const reportingYear = async (req, res) => {
                   )
                   ) as Cons
                   on Anthr.patientId = Cons.patientId
-                  where (Anthr.type_malnutrition = "MAS-K" OR Anthr.type_malnutrition = "MAS-M") AND monthname(Pa.createdAt) = :monthParam 
+                  where (Anthr.type_malnutrition = "MAS-K" OR Anthr.type_malnutrition = "MAS-M" OR Anthr.type_malnutrition = "MAS-M / FMC" OR Anthr.type_malnutrition = "MAS-K / FMC") AND monthname(Pa.createdAt) = :monthParam 
                   ORDER BY Pa.id DESC`,
             {
               replacements: {
