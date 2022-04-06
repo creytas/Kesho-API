@@ -61,8 +61,8 @@ const validationData = [
   body("type_malnutrition")
     .notEmpty()
     .withMessage("Cannot be empty")
-    .matches(/[A-Za-z]{3,4}/)
-    .withMessage("la taille inférieur à 3"),
+    .matches(/[A-Za-z]{1,8}/)
+    .withMessage("la taille inférieur à 1"),
   body("type_statut_marital")
     .matches(/[A-Za-z]{4,}/)
     .withMessage("la taille inférieur à 4"),
