@@ -105,6 +105,7 @@ const addPatient = async (req, res) => {
         allaitement_6mois,
       } = req.body;
       const userId = req.user.id;
+      console.log(first_picture);
       const firstPictureLink = await cloudinary.uploader.upload(first_picture, {
         upload_preset: "dev_setups",
       });
@@ -224,7 +225,7 @@ const addPatient = async (req, res) => {
         .json({ message: "Enregistrement effectuer avec succès" });
     });
   } catch (error) {
-    res.status(400).json({ error: ` ${error}` });
+    res.status(400).json({ error: ` ${error}  et ${req.body.first_picture}` });
   }
 };
 const getPatient = async (req, res) => {
