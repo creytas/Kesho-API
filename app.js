@@ -15,7 +15,8 @@ const routeReporting = require("./routes/reporting");
 const passport = require("passport");
 
 const corsOptions = {
-  origin: ["http://localhost:3000", /.{5,6}\/\/kesho-cntes.{8,}/],
+  // origin: ["http://localhost:3000", /.{5,6}\/\/kesho-cntes.{8,}/],
+  origin: "*",
   credentials: true,
   optionSuccessStatus: 200,
 };
