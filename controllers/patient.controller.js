@@ -7,7 +7,7 @@ const {
   user,
   sequelize,
 } = require("../models");
-const cloudinary = require("../utils/cloudinary");
+const { cloudinary } = require("../utils/cloudinary");
 const { QueryTypes } = require("sequelize");
 const { compareSync } = require("bcrypt");
 
