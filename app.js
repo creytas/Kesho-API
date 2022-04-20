@@ -16,7 +16,8 @@ const passport = require("passport");
 
 const corsOptions = {
   origin: "*",
-  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: false,
   optionSuccessStatus: 200,
 };
 const corsOptions1 = {

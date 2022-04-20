@@ -22,11 +22,11 @@ module.exports = {
       },
       first_picture: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: Sequelize.LONGTEXT,
       },
       last_picture: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: Sequelize.LONGTEXT,
       },
       commentaires: {
         allowNull: true,

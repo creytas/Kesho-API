@@ -109,6 +109,7 @@ const addPatient = async (req, res) => {
       const firstPictureLink = await cloudinary.uploader.upload(first_picture, {
         upload_preset: "dev_setups",
       });
+      console.log(firstPictureLink);
       //Famille refactor insert
       const newFamille = await famille.create({
         taille_famille,
