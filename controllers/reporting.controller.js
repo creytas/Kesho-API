@@ -462,6 +462,18 @@ const getReporting = async (req, res, next) => {
       const briquettes = await matiere_premiere.findOne({
         where: { libelle_matiere: "briq. energ" },
       });
+      const pain = await matiere_premiere.findOne({
+        where: { libelle_matiere: "pain/biscuit" },
+      });
+      const nourriture = await matiere_premiere.findOne({
+        where: { libelle_matiere: "nourriture" },
+      });
+      const vetement = await matiere_premiere.findOne({
+        where: { libelle_matiere: "vêtement" },
+      });
+      const oeufs = await matiere_premiere.findOne({
+        where: { libelle_matiere: "oeufs" },
+      });
 
       res.status(200).json({
         nombre_garcon_now,
@@ -514,6 +526,10 @@ const getReporting = async (req, res, next) => {
         huiles,
         briquettes,
         savon,
+        pain,
+        nourriture,
+        vetement,
+        oeufs,
       });
     });
   } catch (err) {
@@ -1171,6 +1187,58 @@ const getReportingByDate = async (req, res) => {
           plain: true,
         },
       });
+      const pain = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "pain/biscuit",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const nourriture = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "nourriture",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const vetement = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "vêtement",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
+      const oeufs = await matiere_premiere.findOne({
+        where: {
+          libelle_matiere: "oeufs",
+          createdAt: {
+            [Op.between]: [starting_date, ending_date],
+          },
+        },
+        replacements: {
+          starting_date: starting_date,
+          ending_date: ending_date,
+          plain: true,
+        },
+      });
 
       res.status(200).json({
         nombre_garcon_now,
@@ -1212,6 +1280,10 @@ const getReportingByDate = async (req, res) => {
         huiles,
         briquettes,
         savon,
+        pain,
+        nourriture,
+        vetement,
+        oeufs,
       });
     });
   } catch (err) {
