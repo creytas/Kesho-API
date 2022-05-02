@@ -71,7 +71,7 @@ const getOperationsByAffectation = async (req, res, next) => {
       if (isEmpty(operations)) {
         return res.status(404).send({ message: "operations not found" });
       }
-      res.status(200).send({operations,data_amount});
+      res.status(200).send({ operations, data_amount });
     })
     .catch((error) => {
       res.status(500).send({ message: error.message });
@@ -164,7 +164,7 @@ const addOperation = async (req, res, next) => {
       if (updatedMatiere) {
         const newOperation = await operation_matiere.create(
           {
-            date_operation: Date(date_operation),
+            date_operation: date_operation,
             matiere_id: matiereExist.id,
             type_operation: type_operation,
             qte_operation: matiere.qte_operation,

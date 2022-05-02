@@ -7,6 +7,7 @@ const {
   user,
   sequelize,
 } = require("../models");
+const { cloudinary } = require("../utils/cloudinary");
 const { QueryTypes } = require("sequelize");
 const { compareSync } = require("bcrypt");
 
@@ -104,6 +105,12 @@ const addPatient = async (req, res) => {
         allaitement_6mois,
       } = req.body;
       const userId = req.user.id;
+      console.log(first_picture);
+      const firstPictureLink = await cloudinary.uploader.upload(first_picture, {
+        upload_preset: "dev_setups",
+      });
+      const pictureToStore =
+        first_picture === "" ? first_picture : firstPictureLink.secure_url;
       //Famille refactor insert
       const newFamille = await famille.create({
         taille_famille,
@@ -170,7 +177,7 @@ const addPatient = async (req, res) => {
         patientId,
         ration_seche,
         type_oedeme,
-        first_picture,
+        first_picture: pictureToStore,
         last_picture,
         date_admission_patient,
         date_guerison_patient,
@@ -220,7 +227,7 @@ const addPatient = async (req, res) => {
         .json({ message: "Enregistrement effectuer avec succès" });
     });
   } catch (error) {
-    res.status(400).json({ error: ` ${error}` });
+    res.status(400).json({ error: ` ${error}  et ${req.body.first_picture}` });
   }
 };
 const getPatient = async (req, res) => {
@@ -503,7 +510,7 @@ const updatePatient = async (req, res) => {
   } else {
     return res
       .status(400)
-      .send("Access denied. You are an admin you can't update a user.");
+      .send("Access denied. You aren't an admin, you can't update a user.");
   }
 };
 const getAllPatient = async (req, res) => {
