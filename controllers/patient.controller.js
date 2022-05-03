@@ -106,11 +106,16 @@ const addPatient = async (req, res) => {
       } = req.body;
       const userId = req.user.id;
       console.log(first_picture);
-      const firstPictureLink = await cloudinary.uploader.upload(first_picture, {
-        upload_preset: "dev_setups",
-      });
-      const pictureToStore =
-        first_picture === "" ? first_picture : firstPictureLink.secure_url;
+      let firstPictureLink;
+      if (first_picture === "") {
+        firstPictureLink.secure_url = null;
+      } else {
+        firstPictureLink = await cloudinary.uploader.upload(first_picture, {
+          upload_preset: "dev_setups",
+        });
+      }
+      // const pictureToStore =
+      //   first_picture === "" ? first_picture : firstPictureLink.secure_url;
       //Famille refactor insert
       const newFamille = await famille.create({
         taille_famille,
@@ -177,7 +182,7 @@ const addPatient = async (req, res) => {
         patientId,
         ration_seche,
         type_oedeme,
-        first_picture: pictureToStore,
+        first_picture: firstPictureLink.secure_url,
         last_picture,
         date_admission_patient,
         date_guerison_patient,
