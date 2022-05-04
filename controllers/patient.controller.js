@@ -106,10 +106,11 @@ const addPatient = async (req, res) => {
       } = req.body;
       const userId = req.user.id;
       console.log(first_picture);
-      let firstPictureLink;
+      let pictureEmpty;
       if (first_picture === "") {
-        firstPictureLink.secure_url = null;
+        pictureEmpty = true;
       } else {
+        pictureEmpty = false;
         firstPictureLink = await cloudinary.uploader.upload(first_picture, {
           upload_preset: "dev_setups",
         });
@@ -182,7 +183,8 @@ const addPatient = async (req, res) => {
         patientId,
         ration_seche,
         type_oedeme,
-        first_picture: firstPictureLink.secure_url,
+        first_picture:
+          pictureEmpty === true ? first_picture : firstPictureLink.secure_url,
         last_picture,
         date_admission_patient,
         date_guerison_patient,
