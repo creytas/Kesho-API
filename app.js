@@ -18,6 +18,7 @@ const corsOptions = {
   // origin: "*",
   origin: ["http://localhost:3000", /.{5,6}\/\/kesho-cntes.{8,}/],
   credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionSuccessStatus: 200,
 };
 const corsOptions1 = {
