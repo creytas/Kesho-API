@@ -22,6 +22,7 @@ const addAnthropometrique = async (req, res) => {
         type_oedeme,
         commentaires,
         date_admission_patient,
+        first_picture,
       } = req.body;
       const { id_patient } = req.query;
       const { id_user } = req.user;
@@ -56,6 +57,7 @@ const addAnthropometrique = async (req, res) => {
           commentaires,
           date_admission_patient,
           date_guerison_patient,
+          first_picture,
         });
 
         if (patientFind.transferer_unt) {
