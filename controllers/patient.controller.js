@@ -189,6 +189,7 @@ const addPatient = async (req, res) => {
         date_admission_patient,
         date_guerison_patient,
         commentaires,
+        createdAt: date_admission_patient,
       });
       await consulter_par.create({
         patientId,
@@ -251,6 +252,7 @@ const getPatient = async (req, res) => {
           "prenom_patient",
           "sexe_patient",
           "date_naissance_patient",
+          "poids_naissance",
           "adresse_patient",
           "provenance_patient",
           "transferer_unt",

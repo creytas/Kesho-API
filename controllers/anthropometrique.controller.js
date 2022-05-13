@@ -121,6 +121,37 @@ const getAnthropometriqueByIdPatient = async (req, res) => {
   }
 };
 
+const updateAnthropometrique = async (req, res) => {};
+const deleteAnthropometrique = async (req, res) => {
+  if (req.user.is_admin !== true)
+    return res.status(400).send("Access denied. You are not an admin.");
+  try {
+    const result = await sequelize.transaction(async (t) => {
+      const { id } = res;
+      const anthroFind = await anthropometrique.findOne({ where: { id } });
+
+      if (anthroFind) {
+        const anthroDelete = await anthropometrique.destroy({
+          where: {
+            id,
+          },
+        });
+        return res.status(200).json({
+          message: `le rendez-vous est supprimé avec succès`,
+        });
+      } else {
+        return res.status(400).json({
+          message: `Le rendez-vous ayant l'identifiant ${id} est introuvable`,
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: `${error}`,
+    });
+  }
+};
+
 module.exports = {
   addAnthropometrique,
   getAnthropometriqueByIdPatient,
