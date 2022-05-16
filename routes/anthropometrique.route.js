@@ -3,6 +3,8 @@ const anthropometriqueRegisterMiddleware = require("../middleware/anthropometriq
 const {
   addAnthropometrique,
   getAnthropometriqueByIdPatient,
+  updateAnthropometrique,
+  deleteAnthropometrique,
 } = require("../controllers/anthropometrique.controller");
 const router = require("express").Router();
 
@@ -12,5 +14,7 @@ router.get(
   anthropometriqueGetByIdMiddleware,
   getAnthropometriqueByIdPatient
 );
+router.put("/:id", updateAnthropometrique);
+router.delete("/:id", deleteAnthropometrique);
 
 module.exports = router;

@@ -20,7 +20,7 @@ operationRouter.post(
 operationRouter.post("/", operationController.addOperation);
 operationRouter.put(
   "/:id",
-  [matiereExist, quantityChange],
+  [quantityChange],
   operationController.updateOperation
 );
 operationRouter.get("/export", operationController.exportOperation);

@@ -273,6 +273,7 @@ const getPatient = async (req, res) => {
           order: [["id", "DESC"]],
           limit: 10,
           attributes: [
+            "id",
             "peri_cranien",
             "peri_brachial",
             "poids",
@@ -291,6 +292,7 @@ const getPatient = async (req, res) => {
         const Famille = await famille.findOne({
           where: { id: id_famillePatient },
           attributes: [
+            "id",
             "tuteur",
             "taille_menage",
             "id_famille",
@@ -321,6 +323,7 @@ const getPatient = async (req, res) => {
         const CauseMalnutrition = await cause_malnutrition.findOne({
           where: { patientId: id_patient },
           attributes: [
+            "id",
             "id_causemalnutrition",
             "atcd_mas",
             "nbre_chute",
@@ -643,14 +646,342 @@ const getAllPatient = async (req, res) => {
     res.status(500).json({ error: `${error}` });
   }
 };
+const updatePatientIdentity = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const patient_id = req.params.id;
+  const anthroId = await anthropometrique.findAll({
+    limit: 1,
+    where: { patientId: patient_id },
+    order: [["createdAt", "DESC"]],
+  }).id;
+  const {
+    patientId,
+    familyId,
+    firstPicture,
+    lastPicture,
+    prenom,
+    nom,
+    postnom,
+    sexe,
+    dateNaissance,
+    provenance,
+    modeArriver,
+    adresse,
+    vivreAvecParents,
+    tuteur,
+    rangFratrie,
+    tailleFratrie,
+  } = req.body;
+  try {
+    const identity = {
+      nom_patient: nom,
+      postnom_patient: postnom,
+      prenom_patient: prenom,
+      sexe_patient: sexe,
+      date_naissance_patient: dateNaissance,
+      adresse_patient: adresse,
+      provenance_patient: provenance,
+      mode_arrive: modeArriver,
+    };
+    const identityAnthro = {
+      first_picture: firstPicture,
+      last_picture: lastPicture,
+    };
+    const identityFratrie = {
+      rang_fratrie: rangFratrie,
+      taille_fratrie: tailleFratrie,
+    };
+    const identityFamily = {
+      vivre_deux_parents: vivreAvecParents,
+      tuteur: tuteur,
+    };
+    const updatedPatient = await patient.update(
+      identity,
+      { where: { id: patient_id } },
+      { transaction }
+    );
+    const updatedCause = await cause_malnutrition.update(
+      identityFratrie,
+      { where: { patientId: patientId } },
+      { transaction }
+    );
+    const updatedAnthro = await anthropometrique.update(
+      identityAnthro,
+      {
+        where: { id: anthroId },
+      },
+      { transaction }
+    );
+    const updatedFamily = await famille.update(
+      identityFamily,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    if (updatePatient && updatedAnthro && updatedCause && updatedFamily) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updateCauseMalnutrition = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const patient_id = req.params.id;
+  const {
+    patientId,
+    familyId,
+    termeGrossesse,
+    eig,
+    lieuAccouchement,
+    asphyxiePerinatale,
+    dpm,
+    sejourNeo,
+    poidsNaissance,
+    allaitementExclusifSixMois,
+    diversificationAliment,
+    constitutionAliment,
+    consommationPoisson,
+    calendrierVaccin,
+    vaccinationRougeole,
+    atcdMas,
+    tbc,
+    transfererUnt,
+    hospitalisationRecente,
+    diagnostiqueHospitalisation,
+  } = req.body;
+  try {
+    const cause = {
+      atcd_mas: atcdMas,
+      terme_grossesse: termeGrossesse,
+      eig: eig,
+      lieu_accouchement: lieuAccouchement,
+      asphyxie_perinatal: asphyxiePerinatale,
+      dpm: dpm,
+      cause_dpm: dpm !== "Normal" ? dpm : "Aucun",
+      sejour_neonat: sejourNeo,
+      allaitement_6mois: allaitementExclusifSixMois === 6 ? true : false,
+      age_fin_allaitement: allaitementExclusifSixMois,
+      diversification_aliment: diversificationAliment,
+      constitution_aliment: constitutionAliment,
+      calendrier_vaccinal:
+        calendrierVaccin !== "Calendrier vaccinal à jour"
+          ? "Calendrier vaccinal non à jour"
+          : calendrierVaccin,
+      vaccin_non_recu:
+        calendrierVaccin !== "Calendrier vaccinal à jour"
+          ? calendrierVaccin
+          : "Calendrier vaccinal à jour",
+      vaccination_rougeole: vaccinationRougeole,
+      tbc: tbc,
+      hospitalisation_recente: hospitalisationRecente,
+      diagnostique_hospitalisation:
+        hospitalisationRecente === true ? diagnostiqueHospitalisation : "rien",
+    };
+    const causePatientIdentity = {
+      poids_naissance: poidsNaissance,
+      transferer_unt: transfererUnt,
+    };
+    const causeNutrition = {
+      consommation_poisson: consommationPoisson,
+    };
+    const updatedCause = await cause_malnutrition.update(
+      cause,
+      { where: { patientId: patient_id } },
+      { transaction }
+    );
+    const updatedCauseIdentity = await patient.update(
+      causePatientIdentity,
+      { where: { id: patientId } },
+      { transaction }
+    );
+    const updatedCauseNutrition = await famille.update(
+      causeNutrition,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    if (updatedCause && updatedCauseIdentity && updatedCauseNutrition) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updateMere = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const {
+    familyId,
+    mereEnVie,
+    dateNaissanceMere,
+    statutMarital,
+    etatMere,
+    contraceptionMere,
+    contraceptionType,
+    methodeContraceptive,
+    scolariteMere,
+    professionMere,
+  } = req.body;
+  try {
+    const mere = {
+      mere_en_vie: mereEnVie,
+      age_mere: dateNaissanceMere,
+      statut_marital: statutMarital,
+      etat_mere: etatMere,
+      contraception_mere: contraceptionMere,
+      type_contraception:
+        contraceptionMere === false
+          ? "pas de contraception"
+          : contraceptionType,
+      contraception_naturelle:
+        contraceptionMere === false
+          ? "pas de contraception naturel"
+          : contraceptionType === "Naturel"
+          ? methodeContraceptive
+          : "",
+      contraception_moderne:
+        contraceptionMere === false
+          ? "pas de contraception moderne"
+          : contraceptionType === "Moderne"
+          ? methodeContraceptive
+          : "",
+      scolarite_mere: scolariteMere,
+      profession_mere: professionMere,
+    };
+    const updatedMere = await famille.update(
+      mere,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    if (updatedMere) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updatePere = async (req, res) => {
+  const patient_id = req.params.id;
+  const transaction = await sequelize.transaction();
+  const {
+    familyId,
+    pereEnVie,
+    professionChefMenage,
+    regimeMatrimonial,
+    nbrFemme,
+    telephone,
+  } = req.body;
+  try {
+    const pere = {
+      pere_en_vie: pereEnVie,
+      profession_chef_menage: professionChefMenage,
+      type_statut_marital: regimeMatrimonial,
+      nbre_femme_perem: nbrFemme,
+    };
+    const numeroPere = {
+      telephone: telephone,
+    };
+    const updatedPere = await famille.update(
+      pere,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    const updatedNumeroPere = await patient.update(
+      numeroPere,
+      { where: { id: patient_id } },
+      { transaction }
+    );
+    if (updatedPere && updatedNumeroPere) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updateMenage = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const patient_id = req.params.id;
+  const {
+    familyId,
+    tailleMenage,
+    tribu,
+    religion,
+    niveauSocioEconomique,
+    nbrRepasJour,
+    possederTeleRadio,
+    terrainVih,
+    tbcChezParent,
+    atcdTbcFratrie,
+    atcdRougeole,
+  } = req.body;
+  try {
+    const menage = {
+      taille_menage: tailleMenage,
+      tribu: tribu,
+      religion: religion,
+      niveau_socioeconomique: niveauSocioEconomique,
+      nbre_repas: nbrRepasJour,
+      posseder_radio_tele: possederTeleRadio,
+      tbc_parents: tbcChezParent,
+    };
+    const menageATCD = {
+      atcd_rougeole_fratrie: atcdRougeole,
+      terrain_vih: terrainVih,
+      atcd_du_tbc_dans_fratrie: atcdTbcFratrie,
+    };
+    const updatedMenage = await famille.update(
+      menage,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    const updatedMenageATCD = await cause_malnutrition.update(
+      menageATCD,
+      { where: { patientId: patient_id } },
+      { transaction }
+    );
+    if (updatedMenage && updatedMenageATCD) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
 const deletePatient = async (req, res) => {
   if (req.user.is_admin !== true)
     return res.status(400).send("Access denied. You are not an admin.");
   try {
     const result = await sequelize.transaction(async (t) => {
-      const { id_patient } = res;
+      const patient_id = req.params.id;
       const patientFind = await patient.findOne({
-        where: { id_patient },
+        where: { id: patient_id },
       });
       if (patientFind) {
         patientFind.destroy({
@@ -661,7 +992,7 @@ const deletePatient = async (req, res) => {
         });
       }
       res.status(400).json({
-        error: `Le patient ayant l'identifiant ${id_patient} est introuvable`,
+        error: `Le patient ayant l'identifiant ${patient_id} est introuvable`,
       });
     });
   } catch (error) {
@@ -702,6 +1033,7 @@ const detailPatient = async (req, res) => {
           where: { patientId: id_patient },
           order: [["id", "DESC"]],
           attributes: [
+            "id",
             "date_admission_patient",
             "date_guerison_patient",
             "first_picture",
@@ -866,6 +1198,11 @@ module.exports = {
   addPatient,
   getPatient,
   updatePatient,
+  updatePatientIdentity,
+  updateCauseMalnutrition,
+  updateMere,
+  updatePere,
+  updateMenage,
   getAllPatient,
   deletePatient,
   detailPatient,

@@ -123,14 +123,46 @@ const getAnthropometriqueByIdPatient = async (req, res) => {
   }
 };
 
-const updateAnthropometrique = async (req, res) => {};
+const updateAnthropometrique = async (req, res) => {
+  const id = req.params.id;
+  const {
+    date_consultation,
+    peri_brachial,
+    peri_cranien,
+    type_malnutrition,
+    commentaires,
+    poids,
+    taille,
+  } = req.body;
+  try {
+    const anthro = {
+      createdAt: date_consultation,
+      peri_brachial,
+      peri_cranien,
+      type_malnutrition,
+      commentaires,
+      poids,
+      taille,
+    };
+    const updatedAnthro = await anthropometrique
+      .update(anthro, { where: { id: id } })
+      .then((data) => {
+        res.status(200).send(`${data} updated successfully`);
+      })
+      .catch((err) => {
+        res.status(400).send(`UPDATE error occured`);
+      });
+  } catch (error) {
+    res.status(500).json({ error: `${error}` });
+  }
+};
 const deleteAnthropometrique = async (req, res) => {
   if (req.user.is_admin !== true)
     return res.status(400).send("Access denied. You are not an admin.");
   try {
     const result = await sequelize.transaction(async (t) => {
-      const { id } = res;
-      const anthroFind = await anthropometrique.findOne({ where: { id } });
+      const id = req.params.id;
+      const anthroFind = await anthropometrique.findOne({ where: { id: id } });
 
       if (anthroFind) {
         const anthroDelete = await anthropometrique.destroy({
@@ -148,7 +180,7 @@ const deleteAnthropometrique = async (req, res) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       error: `${error}`,
     });
   }
@@ -157,4 +189,6 @@ const deleteAnthropometrique = async (req, res) => {
 module.exports = {
   addAnthropometrique,
   getAnthropometriqueByIdPatient,
+  updateAnthropometrique,
+  deleteAnthropometrique,
 };
