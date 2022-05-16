@@ -974,32 +974,45 @@ const updateMenage = async (req, res) => {
     });
   }
 };
+// const deletePatient = async (req, res) => {
+//   if (req.user.is_admin !== true)
+//     return res.status(400).send("Access denied. You are not an admin.");
+//   try {
+//     const result = await sequelize.transaction(async (t) => {
+//       const patient_id = req.params.id;
+//       const patientFind = await patient.findOne({
+//         where: { id: patient_id },
+//       });
+//       if (patientFind) {
+//         patientFind.destroy({
+//           force: true,
+//         });
+//         res.status(200).json({
+//           message: `Le patient  a été supprimé`,
+//         });
+//       }
+//       res.status(400).json({
+//         error: `Le patient ayant l'identifiant ${patient_id} est introuvable`,
+//       });
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       error: `${error}`,
+//     });
+//   }
+// };
 const deletePatient = async (req, res) => {
   if (req.user.is_admin !== true)
     return res.status(400).send("Access denied. You are not an admin.");
-  try {
-    const result = await sequelize.transaction(async (t) => {
-      const patient_id = req.params.id;
-      const patientFind = await patient.findOne({
-        where: { id: patient_id },
-      });
-      if (patientFind) {
-        patientFind.destroy({
-          force: true,
-        });
-        res.status(200).json({
-          message: `Le patient  a été supprimé`,
-        });
-      }
-      res.status(400).json({
-        error: `Le patient ayant l'identifiant ${patient_id} est introuvable`,
-      });
+  const id = req.params.id;
+  await patient
+    .destroy({ where: { id: id } })
+    .then(() => {
+      res.status(200).send({ message: `patient ${id} deleted` });
+    })
+    .catch((error) => {
+      res.send({ message: error.message });
     });
-  } catch (error) {
-    res.status(400).json({
-      error: `${error}`,
-    });
-  }
 };
 const detailPatient = async (req, res) => {
   try {
