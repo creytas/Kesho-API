@@ -529,7 +529,7 @@ const getReporting = async (req, res, next) => {
         pain,
         nourriture,
         vetement,
-        oeufs,
+        jouets,
       });
     });
   } catch (err) {
