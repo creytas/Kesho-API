@@ -471,8 +471,8 @@ const getReporting = async (req, res, next) => {
       const vetement = await matiere_premiere.findOne({
         where: { libelle_matiere: "vêtement" },
       });
-      const oeufs = await matiere_premiere.findOne({
-        where: { libelle_matiere: "oeufs" },
+      const jouets = await matiere_premiere.findOne({
+        where: { libelle_matiere: "jouets" },
       });
 
       res.status(200).json({
