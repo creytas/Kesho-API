@@ -70,6 +70,14 @@ module.exports = {
         allowNull: true,
         type: Sequelize.BOOLEAN,
       },
+      declarer_sorti: {
+        allowNull: true,
+        type: Sequelize.BOOLEAN,
+      },
+      modalite_sortie: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

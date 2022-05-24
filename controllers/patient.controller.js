@@ -263,6 +263,8 @@ const getPatient = async (req, res) => {
           "mode_arrive",
           "telephone",
           "familleId",
+          "declarer_sorti",
+          "modalite_sortie",
         ],
       });
       if (!Patient) {
