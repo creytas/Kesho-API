@@ -232,7 +232,22 @@ const exportOperation = async (req, res, next) => {
   }
 };
 const deleteAllOperations = async (req, res, next) => {};
-const deleteOperationById = async (req, res, next) => {};
+const deleteOperationById = async (req, res, next) => {
+  const id = req.params.id;
+  if (req.user.is_admin !== true)
+    return res.status(400).send("Access denied. You are not an admin.");
+
+  await operation_matiere
+    .destroy({
+      where: { id: id },
+    })
+    .then(() => {
+      res.status(200).send({ message: `operation ${id} deleted` });
+    })
+    .catch((error) => {
+      res.send({ message: error.message });
+    });
+};
 
 module.exports = {
   getAllOperations,

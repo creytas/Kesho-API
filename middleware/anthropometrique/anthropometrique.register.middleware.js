@@ -29,11 +29,6 @@ const validationData = [
     .withMessage("Cannot be empty")
     .matches(/\d{1,}/)
     .withMessage("pas de lettres"),
-  body("taille")
-    .notEmpty()
-    .withMessage("Cannot be empty")
-    .matches(/\d{2,4}/)
-    .withMessage("pas de lettres"),
   body("type_malnutrition").notEmpty().withMessage("Cannot be empty"),
 ];
 

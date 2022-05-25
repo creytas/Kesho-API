@@ -32,6 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     peri_brachial: DataTypes.FLOAT,
     poids: DataTypes.FLOAT,
     taille: DataTypes.FLOAT,
+    hemoglobine: DataTypes.FLOAT,
+    hematocrite: DataTypes.FLOAT,
     ration_seche: DataTypes.BOOLEAN,
     type_oedeme:DataTypes.STRING,
     type_malnutrition: DataTypes.STRING,

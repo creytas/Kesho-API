@@ -51,6 +51,8 @@ module.exports = (sequelize, DataTypes) => {
       familleId: DataTypes.INTEGER,
       transferer_unt: DataTypes.BOOLEAN,
       declarer_gueri: DataTypes.BOOLEAN,
+      declarer_sorti: DataTypes.BOOLEAN,
+      modalite_sortie: DataTypes.STRING,
     },
     {
       sequelize,

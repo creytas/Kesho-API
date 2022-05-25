@@ -2,23 +2,21 @@ const express = require("express");
 const { matiere_premiere, operation_matiere } = require("../../models");
 
 const matiereExist = async (req, res, next) => {
-  const matieres_operation = req.body.matieres;
+  const matiere_operation = req.body.matiere_id;
 
-  if (matieres_operation && matieres_operation.length > 0) {
-    for (const matiere of matieres_operation) {
-      const matiereExist = await matiere_premiere.findOne({
-        where: {
-          id: matiere.id,
-        },
-      });
-      if (!matiereExist) {
-        return res
-          .status(404)
-          .send({ message: `matiere ${matiere_id} not found` });
-      }
-      req.matiereExist = matiereExist;
-      console.log(`*************la matiere ${req.matiereExist.id} existe`);
+  if (matiere_operation && matiere_operation.length > 0) {
+    const matiereExist = await matiere_premiere.findOne({
+      where: {
+        id: matiere_operation,
+      },
+    });
+    if (!matiereExist) {
+      return res
+        .status(404)
+        .send({ message: `matiere ${matiere_id} not found` });
     }
+    req.matiereExist = matiereExist;
+    console.log(`*************la matiere ${req.matiereExist.id} existe`);
 
     next();
   } else {
@@ -66,6 +64,12 @@ const quantityChange = async (req, res, next) => {
   if (!current_operation) {
     return res.status(404).send("Operation not found");
   }
+  req.matiereExist = await matiere_premiere.findOne({
+    where: { id: current_operation.matiere_id },
+  });
+  if (!req.matiereExist) {
+    return res.status(404).send("Matiere not found");
+  }
   if (
     current_operation.qte_operation === qte_operation &&
     current_operation.type_operation === type_operation
@@ -79,6 +83,7 @@ const quantityChange = async (req, res, next) => {
   } else {
     req.matiereExist.qte_matiere = req.matiereExist.qte_matiere - gap;
   }
+
   next();
 };
 

@@ -46,6 +46,8 @@ const addPatient = async (req, res) => {
         peri_brachial,
         poids,
         taille,
+        hemoglobine,
+        hematocrite,
         type_malnutrition,
         type_contraception,
         contraception_naturelle,
@@ -106,10 +108,11 @@ const addPatient = async (req, res) => {
       } = req.body;
       const userId = req.user.id;
       console.log(first_picture);
-      let firstPictureLink;
+      let pictureEmpty;
       if (first_picture === "") {
-        firstPictureLink.secure_url = null;
+        pictureEmpty = true;
       } else {
+        pictureEmpty = false;
         firstPictureLink = await cloudinary.uploader.upload(first_picture, {
           upload_preset: "dev_setups",
         });
@@ -178,15 +181,19 @@ const addPatient = async (req, res) => {
         peri_brachial,
         poids,
         taille,
+        hematocrite,
+        hemoglobine,
         type_malnutrition,
         patientId,
         ration_seche,
         type_oedeme,
-        first_picture: firstPictureLink.secure_url,
+        first_picture:
+          pictureEmpty === true ? first_picture : firstPictureLink.secure_url,
         last_picture,
         date_admission_patient,
         date_guerison_patient,
         commentaires,
+        createdAt: date_admission_patient,
       });
       await consulter_par.create({
         patientId,
@@ -249,12 +256,15 @@ const getPatient = async (req, res) => {
           "prenom_patient",
           "sexe_patient",
           "date_naissance_patient",
+          "poids_naissance",
           "adresse_patient",
           "provenance_patient",
           "transferer_unt",
           "mode_arrive",
           "telephone",
           "familleId",
+          "declarer_sorti",
+          "modalite_sortie",
         ],
       });
       if (!Patient) {
@@ -269,6 +279,7 @@ const getPatient = async (req, res) => {
           order: [["id", "DESC"]],
           limit: 10,
           attributes: [
+            "id",
             "peri_cranien",
             "peri_brachial",
             "poids",
@@ -286,7 +297,64 @@ const getPatient = async (req, res) => {
         });
         const Famille = await famille.findOne({
           where: { id: id_famillePatient },
-          attributes: ["tuteur"],
+          attributes: [
+            "id",
+            "tuteur",
+            "taille_menage",
+            "id_famille",
+            "vivre_deux_parents",
+            "etat_mere",
+            "pere_en_vie",
+            "mere_en_vie",
+            "age_mere",
+            "profession_mere",
+            "profession_chef_menage",
+            "scolarite_mere",
+            "contraception_mere",
+            "type_contraception",
+            "contraception_naturelle",
+            "contraception_moderne",
+            "niveau_socioeconomique",
+            "statut_marital",
+            "type_statut_marital",
+            "nbre_femme_pere",
+            "tribu",
+            "religion",
+            "posseder_radio_tele",
+            "nbre_repas",
+            "consommation_poisson",
+            "tbc_parents",
+          ],
+        });
+        const CauseMalnutrition = await cause_malnutrition.findOne({
+          where: { patientId: id_patient },
+          attributes: [
+            "id",
+            "id_causemalnutrition",
+            "atcd_mas",
+            "nbre_chute",
+            "eig",
+            "terme_grossesse",
+            "sejour_neonat",
+            "lieu_accouchement",
+            "asphyxie_perinatal",
+            "dpm",
+            "cause_dpm",
+            "calendrier_vaccinal",
+            "rang_fratrie",
+            "taille_fratrie",
+            "atcd_rougeole_fratrie",
+            "vaccination_rougeole",
+            "terrain_vih",
+            "allaitement_6mois",
+            "age_fin_allaitement",
+            "tbc",
+            "atcd_du_tbc_dans_fratrie",
+            "hospitalisation_recente",
+            "diagnostique_hospitalisation",
+            "diversification_aliment",
+            "constitution_aliment",
+          ],
         });
         const consultant = await consulter_par.findOne({
           where: { patientId: id_patient },
@@ -312,6 +380,7 @@ const getPatient = async (req, res) => {
           Patient,
           Anthropometrique,
           Famille,
+          CauseMalnutrition,
           name_consultant,
           date_consultation,
           PatientAge,
@@ -540,7 +609,7 @@ const getAllPatient = async (req, res) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const Patients = await sequelize.query(
-        `select Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date(Date_Consultation) as date_Consultation, Pa.transferer_unt, nom_user as nom_consultant, postnom_user as postnom_consultant  from
+        `select Pa.id, Pa.id_patient, nom_patient, postnom_patient, date(date_naissance_patient) as date_naissance, prenom_patient, Pa.sexe_patient, Anthr.type_malnutrition, date(Date_Consultation) as date_Consultation, Pa.transferer_unt, nom_user as nom_consultant, postnom_user as postnom_consultant  from
         patients as Pa
         inner join ( 
           SELECT id, patientId, type_malnutrition, createdAt as Date_Consultation
@@ -583,32 +652,385 @@ const getAllPatient = async (req, res) => {
     res.status(500).json({ error: `${error}` });
   }
 };
+const updatePatientIdentity = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const patient_id = req.params.id;
+  const anthroId = await anthropometrique.findAll({
+    limit: 1,
+    where: { patientId: patient_id },
+    order: [["createdAt", "DESC"]],
+  }).id;
+  const {
+    patientId,
+    familyId,
+    firstPicture,
+    lastPicture,
+    prenom,
+    nom,
+    postnom,
+    sexe,
+    dateNaissance,
+    provenance,
+    modeArriver,
+    adresse,
+    vivreAvecParents,
+    tuteur,
+    rangFratrie,
+    tailleFratrie,
+  } = req.body;
+  try {
+    const identity = {
+      nom_patient: nom,
+      postnom_patient: postnom,
+      prenom_patient: prenom,
+      sexe_patient: sexe,
+      date_naissance_patient: dateNaissance,
+      adresse_patient: adresse,
+      provenance_patient: provenance,
+      mode_arrive: modeArriver,
+    };
+    const identityAnthro = {
+      first_picture: firstPicture,
+      last_picture: lastPicture,
+    };
+    const identityFratrie = {
+      rang_fratrie: rangFratrie,
+      taille_fratrie: tailleFratrie,
+    };
+    const identityFamily = {
+      vivre_deux_parents: vivreAvecParents,
+      tuteur: tuteur,
+    };
+    const updatedPatient = await patient.update(
+      identity,
+      { where: { id: patient_id } },
+      { transaction }
+    );
+    const updatedCause = await cause_malnutrition.update(
+      identityFratrie,
+      { where: { patientId: patientId } },
+      { transaction }
+    );
+    const updatedAnthro = await anthropometrique.update(
+      identityAnthro,
+      {
+        where: { id: anthroId },
+      },
+      { transaction }
+    );
+    const updatedFamily = await famille.update(
+      identityFamily,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    if (updatePatient && updatedAnthro && updatedCause && updatedFamily) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updateCauseMalnutrition = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const patient_id = req.params.id;
+  const {
+    patientId,
+    familyId,
+    termeGrossesse,
+    eig,
+    lieuAccouchement,
+    asphyxiePerinatale,
+    dpm,
+    sejourNeo,
+    poidsNaissance,
+    allaitementExclusifSixMois,
+    diversificationAliment,
+    constitutionAliment,
+    consommationPoisson,
+    calendrierVaccin,
+    vaccinationRougeole,
+    atcdMas,
+    tbc,
+    transfererUnt,
+    hospitalisationRecente,
+    diagnostiqueHospitalisation,
+  } = req.body;
+  try {
+    const cause = {
+      atcd_mas: atcdMas,
+      terme_grossesse: termeGrossesse,
+      eig: eig,
+      lieu_accouchement: lieuAccouchement,
+      asphyxie_perinatal: asphyxiePerinatale,
+      dpm: dpm,
+      cause_dpm: dpm !== "Normal" ? dpm : "Aucun",
+      sejour_neonat: sejourNeo,
+      allaitement_6mois: allaitementExclusifSixMois === 6 ? true : false,
+      age_fin_allaitement: allaitementExclusifSixMois,
+      diversification_aliment: diversificationAliment,
+      constitution_aliment: constitutionAliment,
+      calendrier_vaccinal:
+        calendrierVaccin !== "Calendrier vaccinal à jour"
+          ? "Calendrier vaccinal non à jour"
+          : calendrierVaccin,
+      vaccin_non_recu:
+        calendrierVaccin !== "Calendrier vaccinal à jour"
+          ? calendrierVaccin
+          : "Calendrier vaccinal à jour",
+      vaccination_rougeole: vaccinationRougeole,
+      tbc: tbc,
+      hospitalisation_recente: hospitalisationRecente,
+      diagnostique_hospitalisation:
+        hospitalisationRecente === true ? diagnostiqueHospitalisation : "rien",
+    };
+    const causePatientIdentity = {
+      poids_naissance: poidsNaissance,
+      transferer_unt: transfererUnt,
+    };
+    const causeNutrition = {
+      consommation_poisson: consommationPoisson,
+    };
+    const updatedCause = await cause_malnutrition.update(
+      cause,
+      { where: { patientId: patient_id } },
+      { transaction }
+    );
+    const updatedCauseIdentity = await patient.update(
+      causePatientIdentity,
+      { where: { id: patientId } },
+      { transaction }
+    );
+    const updatedCauseNutrition = await famille.update(
+      causeNutrition,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    if (updatedCause && updatedCauseIdentity && updatedCauseNutrition) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updateMere = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const {
+    familyId,
+    mereEnVie,
+    dateNaissanceMere,
+    statutMarital,
+    etatMere,
+    contraceptionMere,
+    contraceptionType,
+    methodeContraceptive,
+    scolariteMere,
+    professionMere,
+  } = req.body;
+  try {
+    const mere = {
+      mere_en_vie: mereEnVie,
+      age_mere: dateNaissanceMere,
+      statut_marital: statutMarital,
+      etat_mere: etatMere,
+      contraception_mere: contraceptionMere,
+      type_contraception:
+        contraceptionMere === false
+          ? "pas de contraception"
+          : contraceptionType,
+      contraception_naturelle:
+        contraceptionMere === false
+          ? "pas de contraception naturel"
+          : contraceptionType === "Naturel"
+          ? methodeContraceptive
+          : "",
+      contraception_moderne:
+        contraceptionMere === false
+          ? "pas de contraception moderne"
+          : contraceptionType === "Moderne"
+          ? methodeContraceptive
+          : "",
+      scolarite_mere: scolariteMere,
+      profession_mere: professionMere,
+    };
+    const updatedMere = await famille.update(
+      mere,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    if (updatedMere) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updatePere = async (req, res) => {
+  const patient_id = req.params.id;
+  const transaction = await sequelize.transaction();
+  const {
+    familyId,
+    pereEnVie,
+    professionChefMenage,
+    regimeMatrimonial,
+    nbrFemme,
+    telephone,
+  } = req.body;
+  try {
+    const pere = {
+      pere_en_vie: pereEnVie,
+      profession_chef_menage: professionChefMenage,
+      type_statut_marital: regimeMatrimonial,
+      nbre_femme_perem: nbrFemme,
+    };
+    const numeroPere = {
+      telephone: telephone,
+    };
+    const updatedPere = await famille.update(
+      pere,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    const updatedNumeroPere = await patient.update(
+      numeroPere,
+      { where: { id: patient_id } },
+      { transaction }
+    );
+    if (updatedPere && updatedNumeroPere) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const updateMenage = async (req, res) => {
+  const transaction = await sequelize.transaction();
+  const patient_id = req.params.id;
+  const {
+    familyId,
+    tailleMenage,
+    tribu,
+    religion,
+    niveauSocioEconomique,
+    nbrRepasJour,
+    possederTeleRadio,
+    terrainVih,
+    tbcChezParent,
+    atcdTbcFratrie,
+    atcdRougeole,
+  } = req.body;
+  try {
+    const menage = {
+      taille_menage: tailleMenage,
+      tribu: tribu,
+      religion: religion,
+      niveau_socioeconomique: niveauSocioEconomique,
+      nbre_repas: nbrRepasJour,
+      posseder_radio_tele: possederTeleRadio,
+      tbc_parents: tbcChezParent,
+    };
+    const menageATCD = {
+      atcd_rougeole_fratrie: atcdRougeole,
+      terrain_vih: terrainVih,
+      atcd_du_tbc_dans_fratrie: atcdTbcFratrie,
+    };
+    const updatedMenage = await famille.update(
+      menage,
+      { where: { id: familyId } },
+      { transaction }
+    );
+    const updatedMenageATCD = await cause_malnutrition.update(
+      menageATCD,
+      { where: { patientId: patient_id } },
+      { transaction }
+    );
+    if (updatedMenage && updatedMenageATCD) {
+      await transaction.commit().then(() => {
+        return res.status(200).send({ message: `UPDATE done Succefully` });
+      });
+    } else {
+      throw new Error("UPDATE error occured");
+    }
+  } catch (error) {
+    await transaction.rollback().then(() => {
+      res.status(500).send({ message: error.message });
+    });
+  }
+};
+const UpdateEtatSortie = async (req, res) => {
+  const patient_id = req.params.id;
+  const { declarer_sorti, modalite_sortie } = req.body;
+  await patient
+    .update(req.body, { where: { id: patient_id } })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
+// const deletePatient = async (req, res) => {
+//   if (req.user.is_admin !== true)
+//     return res.status(400).send("Access denied. You are not an admin.");
+//   try {
+//     const result = await sequelize.transaction(async (t) => {
+//       const patient_id = req.params.id;
+//       const patientFind = await patient.findOne({
+//         where: { id: patient_id },
+//       });
+//       if (patientFind) {
+//         patientFind.destroy({
+//           force: true,
+//         });
+//         res.status(200).json({
+//           message: `Le patient  a été supprimé`,
+//         });
+//       }
+//       res.status(400).json({
+//         error: `Le patient ayant l'identifiant ${patient_id} est introuvable`,
+//       });
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       error: `${error}`,
+//     });
+//   }
+// };
 const deletePatient = async (req, res) => {
   if (req.user.is_admin !== true)
     return res.status(400).send("Access denied. You are not an admin.");
-  try {
-    const result = await sequelize.transaction(async (t) => {
-      const { id_patient } = res;
-      const patientFind = await patient.findOne({
-        where: { id_patient },
-      });
-      if (patientFind) {
-        patientFind.destroy({
-          force: true,
-        });
-        res.status(200).json({
-          message: `Le patient  a été supprimé`,
-        });
-      }
-      res.status(400).json({
-        error: `Le patient ayant l'identifiant ${id_patient} est introuvable`,
-      });
+  const id = req.params.id;
+  await patient
+    .destroy({ where: { id: id } })
+    .then(() => {
+      res.status(200).send({ message: `patient ${id} deleted` });
+    })
+    .catch((error) => {
+      res.send({ message: error.message });
     });
-  } catch (error) {
-    res.status(400).json({
-      error: `${error}`,
-    });
-  }
 };
 const detailPatient = async (req, res) => {
   try {
@@ -642,6 +1064,7 @@ const detailPatient = async (req, res) => {
           where: { patientId: id_patient },
           order: [["id", "DESC"]],
           attributes: [
+            "id",
             "date_admission_patient",
             "date_guerison_patient",
             "first_picture",
@@ -806,6 +1229,12 @@ module.exports = {
   addPatient,
   getPatient,
   updatePatient,
+  updatePatientIdentity,
+  updateCauseMalnutrition,
+  updateMere,
+  updatePere,
+  updateMenage,
+  UpdateEtatSortie,
   getAllPatient,
   deletePatient,
   detailPatient,

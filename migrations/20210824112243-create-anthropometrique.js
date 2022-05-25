@@ -45,7 +45,15 @@ module.exports = {
         type: Sequelize.FLOAT,
       },
       taille: {
-        allowNull: false,
+        allowNull: true,
+        type: Sequelize.FLOAT,
+      },
+      hemoglobine: {
+        allowNull: true,
+        type: Sequelize.FLOAT,
+      },
+      hematocrite: {
+        allowNull: true,
         type: Sequelize.FLOAT,
       },
       ration_seche: {

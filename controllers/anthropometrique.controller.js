@@ -20,8 +20,11 @@ const addAnthropometrique = async (req, res) => {
         date_examen,
         ration_seche,
         type_oedeme,
+        hemoglobine,
+        hematocrite,
         commentaires,
         date_admission_patient,
+        first_picture,
       } = req.body;
       const { id_patient } = req.query;
       const { id_user } = req.user;
@@ -49,13 +52,16 @@ const addAnthropometrique = async (req, res) => {
           poids,
           taille,
           type_malnutrition,
-          date_examen,
+          createdAt: date_examen,
           patientId,
           ration_seche,
           type_oedeme,
+          hematocrite,
+          hemoglobine,
           commentaires,
           date_admission_patient,
           date_guerison_patient,
+          first_picture,
         });
 
         if (patientFind.transferer_unt) {
@@ -121,7 +127,72 @@ const getAnthropometriqueByIdPatient = async (req, res) => {
   }
 };
 
+const updateAnthropometrique = async (req, res) => {
+  const id = req.params.id;
+  const {
+    date_consultation,
+    peri_brachial,
+    peri_cranien,
+    type_malnutrition,
+    commentaires,
+    poids,
+    taille,
+  } = req.body;
+  try {
+    const anthro = {
+      createdAt: date_consultation,
+      peri_brachial,
+      peri_cranien,
+      type_malnutrition,
+      commentaires,
+      poids,
+      taille,
+    };
+    const updatedAnthro = await anthropometrique
+      .update(anthro, { where: { id: id } })
+      .then((data) => {
+        res.status(200).send(`${data} updated successfully`);
+      })
+      .catch((err) => {
+        res.status(400).send(`UPDATE error occured`);
+      });
+  } catch (error) {
+    res.status(500).json({ error: `${error}` });
+  }
+};
+const deleteAnthropometrique = async (req, res) => {
+  if (req.user.is_admin !== true)
+    return res.status(400).send("Access denied. You are not an admin.");
+  try {
+    const result = await sequelize.transaction(async (t) => {
+      const id = req.params.id;
+      const anthroFind = await anthropometrique.findOne({ where: { id: id } });
+
+      if (anthroFind) {
+        const anthroDelete = await anthropometrique.destroy({
+          where: {
+            id,
+          },
+        });
+        return res.status(200).json({
+          message: `le rendez-vous est supprimé avec succès`,
+        });
+      } else {
+        return res.status(400).json({
+          message: `Le rendez-vous ayant l'identifiant ${id} est introuvable`,
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: `${error}`,
+    });
+  }
+};
+
 module.exports = {
   addAnthropometrique,
   getAnthropometriqueByIdPatient,
+  updateAnthropometrique,
+  deleteAnthropometrique,
 };
