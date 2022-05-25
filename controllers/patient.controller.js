@@ -980,6 +980,18 @@ const updateMenage = async (req, res) => {
     });
   }
 };
+const UpdateEtatSortie = async (req, res) => {
+  const patient_id = req.params.id;
+  const { declarer_sorti, modalite_sortie } = req.body;
+  await patient
+    .update(req.body, { where: { id: patient_id } })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: error.message });
+    });
+};
 // const deletePatient = async (req, res) => {
 //   if (req.user.is_admin !== true)
 //     return res.status(400).send("Access denied. You are not an admin.");
@@ -1222,6 +1234,7 @@ module.exports = {
   updateMere,
   updatePere,
   updateMenage,
+  UpdateEtatSortie,
   getAllPatient,
   deletePatient,
   detailPatient,

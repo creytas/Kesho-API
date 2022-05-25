@@ -8,6 +8,7 @@ const {
   updateMere,
   updatePere,
   updateMenage,
+  UpdateEtatSortie,
   detailPatient,
   searchPatient,
   exportPatient,
@@ -35,6 +36,7 @@ router.put("/update-cause/:id", updateCauseMalnutrition);
 router.put("/update-mere/:id", updateMere);
 router.put("/update-pere/:id", updatePere);
 router.put("/update-menage/:id", updateMenage);
+router.put("/update-sortie/:id", UpdateEtatSortie);
 router.post("/", patientValidatorAdd, addPatient);
 router.delete("/:id", deletePatient);
 router.post("/search", searchPatientValidator, searchPatient);
