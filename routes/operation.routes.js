@@ -8,6 +8,7 @@ const {
 } = require("../middleware/stock/operations.middlewares");
 
 operationRouter.get("/", operationController.getAllOperations);
+operationRouter.get("/states", operationController.getMaterialState);
 operationRouter.get("/:id", operationController.getOperationById);
 operationRouter.get(
   "/affectation/:affectation",
@@ -23,7 +24,6 @@ operationRouter.put(
   [quantityChange],
   operationController.updateOperation
 );
-operationRouter.get("/export", operationController.exportOperation);
 operationRouter.delete("/", operationController.deleteAllOperations);
 operationRouter.delete("/:id", operationController.deleteOperationById);
 
