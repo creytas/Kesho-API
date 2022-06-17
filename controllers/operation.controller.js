@@ -213,77 +213,97 @@ const getMaterialState = async (req, res) => {
 
   const data = [
     {
-      designation: cornEntrance ? cornEntrance.libelle_matiere : "maïs",
-      entrance: cornEntrance ? cornEntrance.total : 0,
-      exit: cornExit ? cornExit.total : 0,
+      designation: cornEntrance[0].libelle_matiere
+        ? cornEntrance[0].libelle_matiere
+        : "maïs",
+      entrance: cornEntrance[0].total ? cornEntrance[0].total : 0,
+      exit: cornExit[0].total ? cornExit[0].total : 0,
     },
     {
-      designation: sorghumEntrance ? sorghumEntrance.libelle_matiere : "sorgho",
-      entrance: sorghumEntrance ? sorghumEntrance.total : 0,
-      exit: sorghumExit ? sorghumExit.total : 0,
+      designation: sorghumEntrance[0].libelle_matiere
+        ? sorghumEntrance[0].libelle_matiere
+        : "sorgho",
+      entrance: sorghumEntrance[0].total ? sorghumEntrance[0].total : 0,
+      exit: sorghumExit[0].total ? sorghumExit[0].total : 0,
     },
     {
-      designation: soyEntrance ? soyEntrance.libelle_matiere : "soja",
-      entrance: soyEntrance ? soyEntrance.total : 0,
-      exit: soyExit ? soyExit.total : 0,
+      designation: soyEntrance[0].libelle_matiere
+        ? soyEntrance[0].libelle_matiere
+        : "soja",
+      entrance: soyEntrance[0].total ? soyEntrance[0].total : 0,
+      exit: soyExit[0].total ? soyExit[0].total : 0,
     },
     {
-      designation: sugarEntrance ? sugarEntrance.libelle_matiere : "sucre",
-      entrance: sugarEntrance ? sugarEntrance.total : 0,
-      exit: sugarExit ? sugarExit.total : 0,
+      designation: sugarEntrance[0].libelle_matiere
+        ? sugarEntrance[0].libelle_matiere
+        : "sucre",
+      entrance: sugarEntrance[0].total ? sugarEntrance[0].total : 0,
+      exit: sugarExit[0].total ? sugarExit[0].total : 0,
     },
     {
-      designation: soapEntrance ? soapEntrance.libelle_matiere : "savon Omo",
-      entrance: soapEntrance ? soapEntrance.total : 0,
-      exit: soapExit ? soapExit.total : 0,
+      designation: soapEntrance[0].libelle_matiere
+        ? soapEntrance[0].libelle_matiere
+        : "savon Omo",
+      entrance: soapEntrance[0].total ? soapEntrance[0].total : 0,
+      exit: soapExit[0].total ? soapExit[0].total : 0,
     },
     {
-      designation: oilEntrance ? oilEntrance.libelle_matiere : "huile végétale",
-      entrance: oilEntrance ? oilEntrance.total : 0,
-      exit: oilExit ? oilExit.total : 0,
+      designation: oilEntrance[0].libelle_matiere
+        ? oilEntrance[0].libelle_matiere
+        : "huile végétale",
+      entrance: oilEntrance[0].total ? oilEntrance[0].total : 0,
+      exit: oilExit[0].total ? oilExit[0].total : 0,
     },
     {
-      designation: breadEntrance
-        ? breadEntrance.libelle_matiere
+      designation: breadEntrance[0].libelle_matiere
+        ? breadEntrance[0].libelle_matiere
         : "pains/biscuits",
-      entrance: breadEntrance ? breadEntrance.total : 0,
-      exit: breadExit ? breadExit.total : 0,
+      entrance: breadEntrance[0].total ? breadEntrance[0].total : 0,
+      exit: breadExit[0].total ? breadExit[0].total : 0,
     },
     {
-      designation: foodEntrance ? foodEntrance.libelle_matiere : "nourriture",
-      entrance: foodEntrance ? foodEntrance.total : 0,
-      exit: foodExit ? foodExit.total : 0,
+      designation: foodEntrance[0].libelle_matiere
+        ? foodEntrance[0].libelle_matiere
+        : "nourriture",
+      entrance: foodEntrance[0].total ? foodEntrance[0].total : 0,
+      exit: foodExit[0].total ? foodExit[0].total : 0,
     },
     {
-      designation: clothesEntrance
-        ? clothesEntrance.libelle_matiere
+      designation: clothesEntrance[0].libelle_matiere
+        ? clothesEntrance[0].libelle_matiere
         : "vêtements",
-      entrance: clothesEntrance ? clothesEntrance.total : 0,
-      exit: clothesExit ? clothesExit.total : 0,
+      entrance: clothesEntrance[0].total ? clothesEntrance[0].total : 0,
+      exit: clothesExit[0].total ? clothesExit[0].total : 0,
     },
     {
-      designation: toyEntrance ? toyEntrance.libelle_matiere : "jouets",
-      entrance: toyEntrance ? toyEntrance.total : 0,
-      exit: toyExit ? toyExit.total : 0,
+      designation: toyEntrance[0].libelle_matiere
+        ? toyEntrance[0].libelle_matiere
+        : "jouets",
+      entrance: toyEntrance[0].total ? toyEntrance[0].total : 0,
+      exit: toyExit[0].total ? toyExit[0].total : 0,
     },
     {
-      designation: shoesEntrance ? shoesEntrance.libelle_matiere : "chaussures",
-      entrance: shoesEntrance ? shoesEntrance.total : 0,
-      exit: shoesExit ? shoesExit.total : 0,
+      designation: shoesEntrance[0].libelle_matiere
+        ? shoesEntrance[0].libelle_matiere
+        : "chaussures",
+      entrance: shoesEntrance[0].total ? shoesEntrance[0].total : 0,
+      exit: shoesExit[0].total ? shoesExit[0].total : 0,
     },
     {
-      designation: energyBriquetteEntrance
-        ? energyBriquetteEntrance.libelle_matiere
+      designation: energyBriquetteEntrance[0].libelle_matiere
+        ? energyBriquetteEntrance[0].libelle_matiere
         : "briq. énerg",
-      entrance: energyBriquetteEntrance ? energyBriquetteEntrance.total : 0,
-      exit: energyBriquetteExit ? energyBriquetteExit.total : 0,
+      entrance: energyBriquetteEntrance[0].total
+        ? energyBriquetteEntrance[0].total
+        : 0,
+      exit: energyBriquetteExit[0].total ? energyBriquetteExit[0].total : 0,
     },
     {
-      designation: leafExtractEntrance
-        ? leafExtractEntrance.libelle_matiere
+      designation: leafExtractEntrance[0].libelle_matiere
+        ? leafExtractEntrance[0].libelle_matiere
         : "extr. foliaires",
-      entrance: leafExtractEntrance ? leafExtractEntrance.total : 0,
-      exit: leafExtractExit ? leafExtractExit.total : 0,
+      entrance: leafExtractEntrance[0].total ? leafExtractEntrance[0].total : 0,
+      exit: leafExtractExit[0].total ? leafExtractExit[0].total : 0,
     },
   ];
   console.log(data);
