@@ -731,6 +731,7 @@ const updatePatientIdentity = async (req, res) => {
       throw new Error("UPDATE error occured");
     }
   } catch (error) {
+    console.log(`${error.message} - id_patient: ${patient_id}, id_anthro: ${anthroId}, id_family: ${familyId}`);
     await transaction.rollback().then(() => {
       res.status(500).send({ message: error.message });
     });
