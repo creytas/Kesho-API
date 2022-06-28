@@ -678,7 +678,7 @@ const updatePatientIdentity = async (req, res) => {
     where: { patientId: patientId },
     order: [["createdAt", "DESC"]],
   }).id;
-  console.log(patient_id);
+  console.log(` patient id = ${patient_id}`);
   try {
     const identity = {
       nom_patient: nom,
