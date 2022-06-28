@@ -655,11 +655,6 @@ const getAllPatient = async (req, res) => {
 const updatePatientIdentity = async (req, res) => {
   const transaction = await sequelize.transaction();
   const patient_id = req.params.id;
-  const anthroId = await anthropometrique.findAll({
-    limit: 1,
-    where: { patientId: patient_id },
-    order: [["createdAt", "DESC"]],
-  }).id;
   const {
     patientId,
     familyId,
@@ -678,6 +673,12 @@ const updatePatientIdentity = async (req, res) => {
     rangFratrie,
     tailleFratrie,
   } = req.body;
+  const anthroId = await anthropometrique.findAll({
+    limit: 1,
+    where: { patientId: patientId },
+    order: [["createdAt", "DESC"]],
+  }).id;
+  console.log(patient_id);
   try {
     const identity = {
       nom_patient: nom,
@@ -703,7 +704,7 @@ const updatePatientIdentity = async (req, res) => {
     };
     const updatedPatient = await patient.update(
       identity,
-      { where: { id: patient_id } },
+      { where: { id: patientId } },
       { transaction }
     );
     const updatedCause = await cause_malnutrition.update(
@@ -731,6 +732,7 @@ const updatePatientIdentity = async (req, res) => {
       throw new Error("UPDATE error occured");
     }
   } catch (error) {
+    console.log(`${error.message} - id_patient: ${patient_id}, id_anthro: ${anthroId}, id_family: ${familyId}`);
     await transaction.rollback().then(() => {
       res.status(500).send({ message: error.message });
     });
