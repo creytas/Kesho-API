@@ -715,7 +715,7 @@ const updatePatientIdentity = async (req, res) => {
     const updatedAnthro = await anthropometrique.update(
       identityAnthro,
       {
-        where: { id: anthroId.id },
+        where: { id: anthroId[0].id },
       },
       { transaction }
     );
