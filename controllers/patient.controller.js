@@ -1028,7 +1028,7 @@ const deletePatient = async (req, res) => {
     return res.status(400).send("Access denied. You are not an admin.");
   const id = req.params.id;
   await patient
-    .destroy({ where: { id: id } })
+    .destroy({ where: { id: id }, force: true })
     .then(() => {
       res.status(200).send({ message: `patient ${id} deleted` });
     })
