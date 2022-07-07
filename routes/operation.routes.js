@@ -9,7 +9,7 @@ const {
 
 operationRouter.get("/", operationController.getAllOperations);
 operationRouter.get("/states", operationController.getMaterialState);
-operationRouter.post("/states-search",operationController.getMaterialStateByDate)
+operationRouter.post("/states",operationController.getMaterialStateByDate)
 operationRouter.get("/:id", operationController.getOperationById);
 operationRouter.get(
   "/affectation/:affectation",
