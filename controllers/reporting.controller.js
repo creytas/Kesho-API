@@ -1226,9 +1226,9 @@ const getReportingByDate = async (req, res) => {
           plain: true,
         },
       });
-      const oeufs = await matiere_premiere.findOne({
+      const jouets = await matiere_premiere.findOne({
         where: {
-          libelle_matiere: "oeufs",
+          libelle_matiere: "jouets",
           createdAt: {
             [Op.between]: [starting_date, ending_date],
           },
@@ -1283,7 +1283,7 @@ const getReportingByDate = async (req, res) => {
         pain,
         nourriture,
         vetement,
-        oeufs,
+        jouets,
       });
     });
   } catch (err) {
