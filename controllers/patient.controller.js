@@ -677,8 +677,8 @@ const updatePatientIdentity = async (req, res) => {
     limit: 1,
     where: { patientId: patientId },
     order: [["createdAt", "DESC"]],
-  }).id;
-  console.log(patient_id);
+  });
+  // console.log(` patient id = ${patient_id}`);
   try {
     const identity = {
       nom_patient: nom,
@@ -715,7 +715,7 @@ const updatePatientIdentity = async (req, res) => {
     const updatedAnthro = await anthropometrique.update(
       identityAnthro,
       {
-        where: { id: anthroId },
+        where: { id: anthroId[0].id },
       },
       { transaction }
     );
@@ -732,7 +732,9 @@ const updatePatientIdentity = async (req, res) => {
       throw new Error("UPDATE error occured");
     }
   } catch (error) {
-    console.log(`${error.message} - id_patient: ${patient_id}, id_anthro: ${anthroId}, id_family: ${familyId}`);
+    console.log(
+      `${error.message} - id_patient: ${patient_id}, id_anthro: ${anthroId}, id_family: ${familyId}`
+    );
     await transaction.rollback().then(() => {
       res.status(500).send({ message: error.message });
     });
@@ -1026,7 +1028,7 @@ const deletePatient = async (req, res) => {
     return res.status(400).send("Access denied. You are not an admin.");
   const id = req.params.id;
   await patient
-    .destroy({ where: { id: id } })
+    .destroy({ where: { id: id }, force: true })
     .then(() => {
       res.status(200).send({ message: `patient ${id} deleted` });
     })
