@@ -19,11 +19,84 @@ const userValidatorStatusMiddleware = require("../middleware/user/user.validator
 const router = require("express").Router();
 const routerReset = require("express").Router();
 
+/**
+ * @openapi
+ * /user:
+ *      delete:
+ *          description: Delete all users
+ *          tags:
+ *            - users
+ *          responses:
+ *              200:
+ *                  description: All center's raw material successfully deleted
+ */
 router.delete("/", userDestroyMiddleware, deleteUser);
+/**
+ * @openapi
+ * /user:
+ *      put:
+ *          description: Update the current user's data
+ *          tags:
+ *            - users
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          {}
+ *          responses:
+ *              200:
+ *                  description: Current user's data successfully updated
+ */
 router.put("/", userUpdateMiddleware, updateUser);
+/**
+ * @openapi
+ * /user/register:
+ *      post:
+ *          description: Register in the kesho-cntes software
+ *          tags:
+ *              - authentication
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          {email:exemple@exemple.com, password:"000000"}
+ *          responses:
+ *              200:
+ *                  description: You registered in successfully
+ */
 router.post("/register", userRegisterMiddleware, addUser);
+/**
+ * @openapi
+ * /user:
+ *      get:
+ *          description: Display all users data
+ *          tags:
+ *            - users
+ *          responses:
+ *              200:
+ *                  description: Users data successfully displayed
+ */
 router.get("/all", getAllUser);
-router.put("/status", userValidatorStatusMiddleware, updateStatusUser )
+/**
+ * @openapi
+ * /user/status:
+ *      put:
+ *          description: Change the user's status
+ *          tags:
+ *            - users
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          {}
+ *          responses:
+ *              200:
+ *                  description: The user's status is successfully updated
+ */
+router.put("/status", userValidatorStatusMiddleware, updateStatusUser);
 router.get("/", getUserMiddleware, getUserById);
 
 module.exports = router;

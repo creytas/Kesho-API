@@ -1,4 +1,6 @@
 const express = require("express");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
 const app = express();
 const cors = require("cors");
 const authRoute = require("./routes/login.route");
@@ -14,6 +16,33 @@ const { getAllPatient } = require("./controllers/patient.controller");
 const routeReporting = require("./routes/reporting");
 const passport = require("passport");
 
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Kesho Congo API's Library",
+      version: "1.0.0",
+      description: "This is the kesho congo's api documentation",
+      contact: {
+        name: "Randy BUHENDWA",
+        email: "randy.buhendwa@gmail.com",
+      },
+    },
+    servers: [
+      {
+        url: "http://localhost:7000/",
+        description: "Local Server",
+      },
+      {
+        url: "https://kesho-api.onrender.com/",
+        description: "Online Server",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const swaggerSpecs = swaggerJsDoc(swaggerOptions);
 const corsOptions = {
   //origin: "*",
   origin: ["http://localhost:3000", /.{5,6}\/\/kesho-cntes.{8,}/],
@@ -37,7 +66,10 @@ app.use(express.urlencoded({ extended: false }));
 require("./auth/passport");
 
 app.get("/", (req, res) => {
-  res.json({ message: "Votre requête a bien été reçue !" });
+  res.json({
+    message:
+      "Welcome on the Kesho Congo's API!!! Your connexion was successful!!!",
+  });
 });
 
 // Only for test request
@@ -50,6 +82,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(
+  "/api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerSpecs, { explorer: true })
+);
 app.use("/auth", authRoute);
 app.use("/user/reset", routerReset);
 app.use("/user", passport.authenticate("jwt", { session: false }), userRoute);
