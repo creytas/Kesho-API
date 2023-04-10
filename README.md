@@ -5,23 +5,26 @@ this application has been realized with the help of the following technologies<b
 <table>
   <tr>  
     <td align="center" width="96">
-      <img src="https://blog.octo.com/wp-content/uploads/2015/12/react-logo-1000-transparent.png" width="48" height="48" alt="reactjs" />
-      <h3>ReactJS</h3>
+      <img src="https://ih1.redbubble.net/image.438908244.6144/st,small,507x507-pad,600x600,f8f8f8.u2.jpg" width="48" height="48" alt="expressjs" />
+      <h3>ExpressJS</h3>
     </td>&nbsp;&nbsp;
     <td align="center" width="96">
       <img src="https://seeklogo.com/images/N/nodejs-logo-FBE122E377-seeklogo.com.png" width="42" height="42" alt="node" />
       <h3>NodeJs</h3>
     </td>&nbsp;&nbsp;
     <td align="center" width="96">  
-      <img src="https://mui.com/static/logo.png" width="48" height="48" alt="mui" />
-      <h3>MUI</h3>
+      <img src="https://google.github.io/sqlcommenter/images/sequelize-logo.png" width="48" height="48" alt="sequelize" />
+      <h3>Sequelize</h3>
     </td>
+  </tr>
+  <tr>
+    <td align="center" width="96"><img src="https://miro.medium.com/v2/resize:fit:736/1*3bMcQcLAE-fPjVEhnY5xsQ.png" alt="node, sequelize and mysql"/></td>
   </tr>
 </table>  
 
 ## Description
 <p>
-<strong>Kesho Congo</strong> is a social action dealing with the care of <strong>malnourished children</strong>. Thanks to this application, it can <strong>register</strong>, <strong>follow up weekly</strong> the patients and <strong>manage the stocks</strong> of the nutritional center.
+<strong>Kesho Congo</strong> is a social action dealing with the care of <strong>malnourished children</strong>. Thanks to this application programming interface, it can <strong>manage</strong>, <strong>follow up weekly</strong> the patients and <strong>manage the stocks</strong> of the nutritional center.
 </p>
 
 ## Main features
