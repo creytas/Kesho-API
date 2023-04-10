@@ -24,7 +24,7 @@ this application has been realized with the help of the following technologies<b
 
 ## Description
 <p>
-<strong>Kesho Congo</strong> is a social action dealing with the care of <strong>malnourished children</strong>. Thanks to this application programming interface, it can <strong>manage</strong>, <strong>follow up weekly</strong> the patients and <strong>manage the stocks</strong> of the nutritional center.
+<strong>Kesho Congo</strong> is a social action dealing with the care of <strong>malnourished children</strong>. Thanks to this application programming interface, it can <strong>manage</strong> and <strong>make available data in real time</strong> in order to exploit them via software and other tools.
 </p>
 
 ## Main features
