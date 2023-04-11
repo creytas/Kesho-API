@@ -40,8 +40,22 @@ or
 `
 yarn install
 `
-3. Add the four environmental variables that will be used to connect to the database: 
+3. Add the environmental variables that will be used in the process: 
+``
+JWT_SECRET = <your_jwt_secret>
+SENDGRID_API_KEY = <your_sendgrid_api_key>
+SENDGRID_SENDER = <your_sendgrid_sender>
+MAILNAME = <your_sendgrid_mail_account>
+PASSMAIL = <your_sendgrid_account_password>
+<br/>
+CLOUDINARY_URL = <your_cloudinary_url>
+CLOUDINARY_API_KEY = <your_cloudinary_api_key>
+CLOUDINARY_API_SECRET = <your_cloudinary_api_secret>
+CLOUDINARY_API_NAME = <your_cloudinary_api_name>
+<br/>
+NODE_ENV = development
 
+``
 5. Run the project. <br/>
 Launch &nbsp;
 `
