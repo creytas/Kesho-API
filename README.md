@@ -41,21 +41,29 @@ or
 yarn install
 `
 3. Add the environmental variables that will be used in the process: 
-``
+```
 JWT_SECRET = <your_jwt_secret>
 SENDGRID_API_KEY = <your_sendgrid_api_key>
 SENDGRID_SENDER = <your_sendgrid_sender>
 MAILNAME = <your_sendgrid_mail_account>
 PASSMAIL = <your_sendgrid_account_password>
-<br/>
+
 CLOUDINARY_URL = <your_cloudinary_url>
 CLOUDINARY_API_KEY = <your_cloudinary_api_key>
 CLOUDINARY_API_SECRET = <your_cloudinary_api_secret>
 CLOUDINARY_API_NAME = <your_cloudinary_api_name>
-<br/>
-NODE_ENV = development
 
-``
+NODE_ENV = development
+PORTLOCAL = 4000
+DB_HOSTLOCAL = <localhost or 127.0.0.1>
+DB_USERLOCAL = <root or your_mysql_username>
+DB_PASSLOCAL = <"" or your_mysql_password>
+DB_NAMELOCAL = kesho_db
+DB_PORTLOCAL = 3306
+DB_CHARSETLOCAL = utf8
+DB_CONNECTION_LIMITLOCAL = 10
+DB_CONNECTION_TIMEOUTLOCAL = 100000
+```
 5. Run the project. <br/>
 Launch &nbsp;
 `
