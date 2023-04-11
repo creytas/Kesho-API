@@ -28,7 +28,7 @@ To get the project running locally on your machine you need to have the followin
 1. Clone the project:
 
 ```
-git clone https://github.com/creytas/Kesho-API.git && cd Kesho-API
+git clone https://github.com/creytas/Kesho-API.git && cd Kesho-API && git checkout -b develop
 ```
 
 2. Install Node.JS packages via npm. Do you want to use yarn instead? Use `npm install --global yarn`.<br/>
