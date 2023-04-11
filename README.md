@@ -10,11 +10,9 @@ this application has been realized with the help of the following technologies<b
 </p>
 
 ## Main features
-- visualize the general status of the patients and stocks of the nutritional center
-- register patients when they first enter the center
-- consult the patient by taking his anthropometric parameters
-- draw up a health map of the patient showing graphically his evolution as well as a history of consultations
-- edit various patient information
+- provide reporting from the nutritional center
+- register the patient, update the anthropometry, provide patient details for further statistics
+- management of users and authentications
 - see the operations carried out on the raw material stock of the center
 - see current stock status
 - record a transaction on stock
