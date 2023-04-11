@@ -1,5 +1,5 @@
 # Kesho-API
-the application programming interface of the nutritional center Kesho Congo <br/>https://kesho-api.onrender.com/api-docs<br/>
+the application programming interface of the nutritional center Kesho Congo <br/> Here's the documentation: https://kesho-api.onrender.com/api-docs<br/>
 ## Build with
 this application has been realized with the help of the following technologies<br/>
 <img src="https://miro.medium.com/v2/resize:fit:736/1*3bMcQcLAE-fPjVEhnY5xsQ.png" alt="node, sequelize and mysql"/>  
@@ -64,6 +64,12 @@ DB_CHARSETLOCAL = utf8
 DB_CONNECTION_LIMITLOCAL = 10
 DB_CONNECTION_TIMEOUTLOCAL = 100000
 ```
+4. Generate database and execute migrations.<br/>
+run this sequelize-cli commands to create a mySQL database:<br/>
+`npx sequelize-cli db:create`<br/>
+and launch this one to run migrations:<br/>
+`npx sequelize-cli db:migrate`
+
 5. Run the project. <br/>
 Launch &nbsp;
 `
